@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maré de Pratas - Catálogo</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header Aprimorado -->
+    <header class="main-header">
+        <div class="header-top">
+            <div class="container">
+                <div class="header-promo">
+                    <span><i class="fas fa-truck"></i> Frete grátis para compras acima de R$ 200</span>
+                    <span><i class="fas fa-gem"></i> Joias em prata 950</span>
+                </div>
+                <div class="header-actions">
+                    <a href="#"><i class="fas fa-phone"></i> (21) 99999-9999</a>
+                    <div class="social-icons">
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-whatsapp"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="header-main">
+            <div class="container">
+                <div class="logo-container">
+                    <a href="/" class="logo">
+                        <img src="/static/images/logo-mare.png" alt="Maré de Pratas">
+                        <span>Maré de Pratas</span>
+                    </a>
+                </div>
+
+                <div class="search-container">
+                    <form action="/busca" method="GET">
+                        <input type="text" placeholder="Buscar produtos..." name="q">
+                        <button type="submit"><i class="fas fa-search"></i></button>
+                    </form>
+                </div>
+
+                <div class="user-actions">
+                    <a href="/login" class="user-btn"><i class="far fa-user"></i></a>
+                    <a href="/favoritos" class="user-btn"><i class="far fa-heart"></i></a>
+                    <a href="/carrinho" class="cart-btn">
+                        <i class="fas fa-shopping-bag"></i>
+                        <span class="cart-count">3</span>
+                    </a>
+                </div>
+
+                <button class="menu-toggle" aria-label="Menu">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+
+        <nav class="main-nav">
+            <div class="container">
+                <ul>
+                    <li><a href="/">Home</a></li>
+                    <li class="dropdown">
+                        <a href="/produtos">Produtos <i class="fas fa-chevron-down"></i></a>
+                        <div class="dropdown-menu">
+                            <a href="/produtos/pulseiras">Pulseiras</a>
+                            <a href="/produtos/colares">Colares</a>
+                            <a href="/produtos/aneis">Anéis</a>
+                            <a href="/produtos/brincos">Brincos</a>
+                        </div>
+                    </li>
+                    <li><a href="/colecoes">Coleções</a></li>
+                    <li><a href="/sobre">Sobre Nós</a></li>
+                    <li><a href="/blog">Blog</a></li>
+                    <li><a href="/contato">Contato</a></li>
+                </ul>
+            </div>
+        </nav>
+
+        <nav class="mobile-nav">
+            <div class="mobile-search">
+                <form action="/busca" method="GET">
+                    <input type="text" placeholder="Buscar produtos..." name="q">
+                    <button type="submit"><i class="fas fa-search"></i></button>
+                </form>
+            </div>
+            <ul>
+                <li><a href="/"><i class="fas fa-home"></i> Home</a></li>
+                <li class="mobile-dropdown">
+                    <a href="#"><i class="fas fa-gem"></i> Produtos <i class="fas fa-chevron-down"></i></a>
+                    <ul class="mobile-dropdown-menu">
+                        <li><a href="/produtos/pulseiras">Pulseiras</a></li>
+                        <li><a href="/produtos/colares">Colares</a></li>
+                        <li><a href="/produtos/aneis">Anéis</a></li>
+                        <li><a href="/produtos/brincos">Brincos</a></li>
+                    </ul>
+                </li>
+                <li><a href="/colecoes"><i class="fas fa-star"></i> Coleções</a></li>
+                <li><a href="/login"><i class="far fa-user"></i> Minha Conta</a></li>
+                <li><a href="/favoritos"><i class="far fa-heart"></i> Favoritos</a></li>
+                <li><a href="/carrinho"><i class="fas fa-shopping-bag"></i> Carrinho</a></li>
+                <li><a href="/sobre"><i class="fas fa-info-circle"></i> Sobre Nós</a></li>
+                <li><a href="/blog"><i class="fas fa-newspaper"></i> Blog</a></li>
+                <li><a href="/contato"><i class="fas fa-envelope"></i> Contato</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Resto do conteúdo... -->
+
+    <script>
+        // Menu mobile
+        document.querySelector('.menu-toggle').addEventListener('click', function() {
+            document.querySelector('.mobile-nav').classList.toggle('active');
+            this.classList.toggle('active');
+        });
+
+        // Dropdowns
+        document.querySelectorAll('.dropdown, .mobile-dropdown').forEach(item => {
+            const link = item.querySelector('a');
+            link.addEventListener('click', function(e) {
+                if (window.innerWidth <= 768) {
+                    e.preventDefault();
+                    const menu = item.querySelector('.dropdown-menu, .mobile-dropdown-menu');
+                    menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+                }
+            });
+        });
+
+        // Fechar menu ao clicar em um link
+        document.querySelectorAll('.mobile-nav a').forEach(link => {
+            link.addEventListener('click', function() {
+                if (!this.parentElement.classList.contains('mobile-dropdown')) {
+                    document.querySelector('.mobile-nav').classList.remove('active');
+                    document.querySelector('.menu-toggle').classList.remove('active');
+                }
+            });
+        });
+
+        // Ajustar dropdowns na mudança de tamanho da tela
+        window.addEventListener('resize', function() {
+            if (window.innerWidth > 768) {
+                document.querySelectorAll('.dropdown-menu, .mobile-dropdown-menu').forEach(menu => {
+                    menu.style.display = '';
+                });
+            }
+        });
+    </script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maré de Pratas - Catálogo</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-content">
+                <button class="menu-toggle" aria-label="Abrir menu">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h1>Maré de Pratas</h1>
+                <nav class="main-nav">
+                    <span class="user-greeting">Olá, Guest1234!</span>
+                    <a href="/logout" class="btn-logout">Sair</a>
+                </nav>
+            </div>
+            
+            <nav class="mobile-nav">
+                <ul>
+                    <li><a href="/login"><i class="fas fa-sign-in-alt"></i> Login</a></li>
+                    <li><a href="/registro"><i class="fas fa-user-plus"></i> Cadastro</a></li>
+                    <li><a href="#"><i class="fas fa-info-circle"></i> Sobre</a></li>
+                    <li><a href="#"><i class="fas fa-envelope"></i> Contato</a></li>
+                    <li><a href="/catalogo"><i class="fas fa-store"></i> Catálogo</a></li>
+                </ul>
+            </nav>
+        </header>
+        
+        <main>
+            <h2 class="catalog-title">Catálogo de Produtos</h2>
+            
+            <div class="products-grid">
+                <div class="product-card">
+                    <div class="product-image">
+                        <img src="/static/images/pulseira.jpg" alt="Pulseira de prata">
+                        <div class="product-badge">Novo</div>
+                    </div>
+                    <div class="product-info">
+                        <h3>Pulseira de Prata</h3>
+                        <div class="price-container">
+                            <p class="price">R$ 90,00</p>
+                            <span class="discount">R$ 120,00</span>
+                        </div>
+                        <p class="description">Joia rara com detalhes em diamantes</p>
+                        <div class="product-actions">
+                            <button class="btn-wishlist"><i class="far fa-heart"></i></button>
+                            <button class="btn-add-to-cart">Adicionar ao Carrinho</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="product-card">
+                    <div class="product-image">
+                        <img src="/static/images/colar.jpg" alt="Colar de prata">
+                    </div>
+                    <div class="product-info">
+                        <h3>Colar Marinho</h3>
+                        <div class="price-container">
+                            <p class="price">R$ 150,00</p>
+                        </div>
+                        <p class="description">Colar de prata com pingente em forma de onda</p>
+                        <div class="product-actions">
+                            <button class="btn-wishlist"><i class="far fa-heart"></i></button>
+                            <button class="btn-add-to-cart">Adicionar ao Carrinho</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="product-card">
+                    <div class="product-image">
+                        <img src="/static/images/anel.jpg" alt="Anel de prata">
+                        <div class="product-badge">-20%</div>
+                    </div>
+                    <div class="product-info">
+                        <h3>Anel Oceânico</h3>
+                        <div class="price-container">
+                            <p class="price">R$ 75,00</p>
+                            <span class="discount">R$ 95,00</span>
+                        </div>
+                        <p class="description">Anel de prata com detalhes em esmalte azul</p>
+                        <div class="product-actions">
+                            <button class="btn-wishlist"><i class="far fa-heart"></i></button>
+                            <button class="btn-add-to-cart">Adicionar ao Carrinho</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <script src="/static/js/script.js"></script>
+    <script>
+        // Menu hamburguer
+        document.querySelector('.menu-toggle').addEventListener('click', function() {
+            document.querySelector('.mobile-nav').classList.toggle('active');
+            this.querySelector('i').classList.toggle('fa-times');
+            this.querySelector('i').classList.toggle('fa-bars');
+        });
+        
+        // Efeito de hover nos cards
+        const productCards = document.querySelectorAll('.product-card');
+        productCards.forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.querySelector('.product-actions').style.opacity = '1';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.querySelector('.product-actions').style.opacity = '0';
+            });
+        });
+    </script>
+</body>
+</html>
