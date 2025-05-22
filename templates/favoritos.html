@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maré de Pratas - Favoritos</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="/static/css/favorito.css">
+</head>
+<body>
+    <header class="main-header">
+        <div class="container">
+            <div class="header-main">
+                <div class="logo-container">
+                    <a href="/" class="logo">
+                        <img src="/images/logo-mare.png" alt="Maré de Pratas">
+                        <span>Maré de Pratas</span>
+                    </a>
+                </div>
+                
+                <div class="nav-buttons">
+                    <a href="/templates/produtos.html" class="nav-button">Produtos</a>
+                    <a href="/templates/sobre.html" class="nav-button">Sobre</a>
+                </div>
+                
+                <div class="search-and-actions">
+                    <div class="search-container">
+                        <form>
+                            <input type="text" placeholder="Pesquisar...">
+                            <button type="submit"><i class="fas fa-search"></i></button>
+                        </form>
+                    </div>
+                    
+                    <div class="user-actions">
+                        <a href="/templates/carrinho.html"><i class="fas fa-shopping-bag"></i></a>
+                    </div>
+                </div>
+                
+                <button class="menu-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="favorites-page">
+        <div class="container">
+            <div class="page-header">
+                <h1><i class="fas fa-heart"></i> Seus Favoritos</h1>
+                <p>Suas joias selecionadas com carinho</p>
+            </div>
+            
+            <div class="favorites-grid">
+                <!-- Produto Favorito 1 -->
+                <div class="favorite-card">
+                    <div class="product-image">
+                        <img src="/images/produto1.jpg" alt="Anel Estrela do Mar">
+                        <button class="remove-favorite"><i class="fas fa-heart"></i></button>
+                    </div>
+                    <div class="product-info">
+                        <h3>Anel Estrela do Mar</h3>
+                        <div class="price">R$ 129,90</div>
+                        <div class="installment">ou 3x de R$ 43,30</div>
+                        <div class="product-actions">
+                            <button class="btn-add-to-cart">Adicionar ao Carrinho</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Produto Favorito 2 -->
+                <div class="favorite-card">
+                    <div class="product-image">
+                        <img src="/images/produto3.jpg" alt="Pulseira Concha">
+                        <button class="remove-favorite"><i class="fas fa-heart"></i></button>
+                    </div>
+                    <div class="product-info">
+                        <h3>Pulseira Concha</h3>
+                        <div class="price">R$ 99,90 <span class="old-price">R$ 124,90</span></div>
+                        <div class="installment">ou 2x de R$ 49,95</div>
+                        <div class="product-actions">
+                            <button class="btn-add-to-cart">Adicionar ao Carrinho</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Produto Favorito 3 -->
+                <div class="favorite-card">
+                    <div class="product-image">
+                        <img src="/images/produto6.jpg" alt="Anel Infinito">
+                        <button class="remove-favorite"><i class="fas fa-heart"></i></button>
+                    </div>
+                    <div class="product-info">
+                        <h3>Anel Infinito</h3>
+                        <div class="price">R$ 149,90</div>
+                        <div class="installment">ou 3x de R$ 49,97</div>
+                        <div class="product-actions">
+                            <button class="btn-add-to-cart">Adicionar ao Carrinho</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="empty-favorites" style="display: none;">
+                <div class="empty-message">
+                    <i class="far fa-heart"></i>
+                    <h2>Seus favoritos estão vazios</h2>
+                    <p>Explore nossa coleção e adicione seus produtos favoritos</p>
+                    <a href="/templates/produtos.html" class="btn-explore">Explorar Produtos</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="main-footer">
+        <div class="container">
+            <div class="footer-container">
+                <div class="footer-content">
+                    <div class="footer-info">
+                        <p><i class="fas fa-gem"></i> Joias em prata 950</p>
+                        <p><i class="fas fa-phone"></i> (85) 98224-6332</p>
+                    </div>
+                </div>
+                
+                <div class="social-container">
+                    <div class="social-icons">
+                        <a href="https://www.instagram.com/mare_depratas?igsh=bDBsbXhwY3N5NmQ2"><i class="fab fa-instagram"></i></a>
+                        <a href="https://api.whatsapp.com/send/?phone=5585982246332&text&type=phone_number&app_absent=0"><i class="fab fa-whatsapp"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Simulação: clique para remover favoritos
+        document.querySelectorAll('.remove-favorite').forEach(button => {
+            button.addEventListener('click', function() {
+                const card = this.closest('.favorite-card');
+                card.style.animation = 'fadeOut 0.3s forwards';
+                
+                setTimeout(() => {
+                    card.remove();
+                    
+                    // Mostra mensagem se não houver mais favoritos
+                    if(document.querySelectorAll('.favorite-card').length === 0) {
+                        document.querySelector('.empty-favorites').style.display = 'block';
+                    }
+                }, 300);
+            });
+        });
+    </script>
+</body>
+</html>

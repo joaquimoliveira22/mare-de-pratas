@@ -311,12 +311,12 @@ body {
 }
 
 .btn-add-to-cart:hover {
-    background-color: #2a7ae1;
+    background-color: #3a8af1;
 }
-
+    
 /* Footer */
 .main-footer {
-    background-color: #333;
+    background-color: #3a8af1;
     color: white;
     padding: 40px 0 20px;
 }
@@ -331,7 +331,7 @@ body {
 .footer-section h3 {
     font-size: 1.2rem;
     margin-bottom: 15px;
-    color: #3a8af1;
+    color: #ffffff;
 }
 
 .footer-section p {
@@ -353,13 +353,13 @@ body {
 }
 
 .social-icons a:hover {
-    color: #3a8af1;
+    color: #ffffff;
 }
 
 .copyright {
     text-align: center;
     padding-top: 20px;
-    border-top: 1px solid #444;
+    border-top: 1px solid #ffffff;
     color: #aaa;
     font-size: 0.9rem;
 }
@@ -413,13 +413,108 @@ body {
 
 @media (max-width: 576px) {
     .filters {
+    display: flex;
+    justify-content: center;
+    gap: 25px;
+    margin-bottom: 40px;
+    flex-wrap: wrap;
+    background-color: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-width: 200px;
+}
+
+.filter-group label {
+    font-weight: 600;
+    color: #3a8af1;
+    font-size: 0.95rem;
+    padding-left: 5px;
+}
+
+.filter-group select {
+    padding: 12px 15px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    background-color: white;
+    color: #333;
+    cursor: pointer;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+    appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%233a8af1'%3e%3cpath d='M7 10l5 5 5-5z'/%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 16px;
+}
+
+.filter-group select:focus {
+    outline: none;
+    border-color: #3a8af1;
+    box-shadow: 0 0 0 3px rgba(58, 138, 241, 0.2);
+}
+
+.filter-group select:hover {
+    border-color: #b3d1ff;
+}
+
+/* Botão de Aplicar Filtros (novo) */
+.apply-filters {
+    display: flex;
+    align-items: flex-end;
+}
+
+.apply-filters button {
+    background-color: #3a8af1;
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.apply-filters button:hover {
+    background-color: #2a7ae1;
+    transform: translateY(-2px);
+}
+
+.apply-filters button i {
+    font-size: 1rem;
+}
+
+/* Efeito de foco nos filtros */
+.filter-group:focus-within label {
+    color: #2a7ae1;
+}
+
+/* Responsividade para filtros */
+@media (max-width: 768px) {
+    .filters {
         flex-direction: column;
-        align-items: stretch;
+        gap: 15px;
+        padding: 15px;
     }
     
     .filter-group {
-        flex-direction: column;
-        align-items: flex-start;
+        width: 100%;
+    }
+    
+    .apply-filters button {
+        width: 100%;
+        justify-content: center;
+    }
+}
     }
     
     .logo span {
@@ -437,4 +532,3 @@ body {
     .search-box input {
         flex-grow: 1;
     }
-}
