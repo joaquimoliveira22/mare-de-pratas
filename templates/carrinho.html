@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maré de Pratas - Carrinho</title>
+    <link rel="stylesheet" href="/static/css/carrinho.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-content">
+                <a href="/" class="logo">
+                    <img src="/images/logo mare de pratas sem nome.jpg" alt="Maré de Pratas">
+                    <span>Maré de Pratas</span>
+                </a>
+                
+                <nav class="header-nav">
+                    <a href="/templates/catalogo.html" class="nav-btn">
+                        <i class="fas fa-store"></i> Catálogo
+                    </a>
+                    <a href="/templates/produtos.html" class="nav-btn">
+                        <i class="fas fa-gem"></i> Produtos
+                    </a>
+                    <a href="/templates/sobre.html" class="nav-btn">
+                        <i class="fas fa-info-circle"></i> Sobre
+                    </a>
+                </nav>
+            </div>
+        </header>
+        
+        <div class="cart-header">
+            <h1>Seu Carrinho</h1>
+        </div>
+        
+        <!-- Carrinho com itens -->
+        <div class="cart-summary">
+            <div class="summary-row">
+                <span>Subtotal (3 itens)</span>
+                <span>R$ 315,00</span>
+            </div>
+            <div class="summary-row">
+                <span>Frete</span>
+                <span>Grátis</span>
+            </div>
+            <div class="summary-row">
+                <span>Total</span>
+                <span>R$ 315,00</span>
+            </div>
+        </div>
+        
+        <div class="cart-items">
+            <!-- Item 1 -->
+            <div class="cart-item">
+                <img src="/static/images/pulseira.jpg" alt="Pulseira de prata" class="item-image">
+                <div class="item-details">
+                    <h3 class="item-name">Pulseira de Prata</h3>
+                    <p class="item-price">R$ 90,00</p>
+                </div>
+                <div class="item-actions">
+                    <div class="quantity-control">
+                        <button class="quantity-btn">-</button>
+                        <span class="quantity">1</span>
+                        <button class="quantity-btn">+</button>
+                    </div>
+                    <button class="remove-btn">Remover</button>
+                </div>
+            </div>
+            
+            <!-- Item 2 -->
+            <div class="cart-item">
+                <img src="/static/images/colar.jpg" alt="Colar de prata" class="item-image">
+                <div class="item-details">
+                    <h3 class="item-name">Colar Marinho</h3>
+                    <p class="item-price">R$ 150,00</p>
+                </div>
+                <div class="item-actions">
+                    <div class="quantity-control">
+                        <button class="quantity-btn">-</button>
+                        <span class="quantity">1</span>
+                        <button class="quantity-btn">+</button>
+                    </div>
+                    <button class="remove-btn">Remover</button>
+                </div>
+            </div>
+            
+            <!-- Item 3 -->
+            <div class="cart-item">
+                <img src="/static/images/anel.jpg" alt="Anel de prata" class="item-image">
+                <div class="item-details">
+                    <h3 class="item-name">Anel Oceânico</h3>
+                    <p class="item-price">R$ 75,00</p>
+                </div>
+                <div class="item-actions">
+                    <div class="quantity-control">
+                        <button class="quantity-btn">-</button>
+                        <span class="quantity">1</span>
+                        <button class="quantity-btn">+</button>
+                    </div>
+                    <button class="remove-btn">Remover</button>
+                </div>
+            </div>
+        </div>
+        
+        <button class="checkout-btn">Finalizar Compra</button>
+        
+       -
+        <div class="empty-cart">
+            <p>Seu carrinho está vazio</p>
+            <a href="/templates/produtos.html" class="continue-shopping">Continuar comprando</a>
+        </div>
+        
+    </div>
+
+    <script src="/static/js/carrinho.js"></script>
+</body>
+</html>
