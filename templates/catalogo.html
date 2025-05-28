@@ -46,7 +46,6 @@
             <nav class="mobile-nav">
                 <ul>
                     <li><a href="/templates/login.html"><i class="fas fa-sign-in-alt"></i> Login</a></li>
-                    <li><a href="/templates/registro.html"><i class="fas fa-user-plus"></i> Cadastro</a></li>
                     <li><a href="/templates/favoritos.html"><i class="far fa-heart"></i> Favoritos</a></li>
                     <li><a href="/templates/carrinho.html"><i class="fas fa-shopping-bag"></i> Carrinho</a></li>
                     <li><a href="/templates/sobre.html"><i class="fas fa-info-circle"></i> Sobre</a></li>
@@ -74,7 +73,7 @@
                         <p class="description">Joia rara com detalhes em diamantes</p>
                         <div class="product-actions">
                             <button class="btn-wishlist"><i class="far fa-heart"></i></button>
-                            <button class="btn-add-to-cart">Adicionar ao Carrinho</button>
+                           <button class="btn-add-to-cart" data-product-id="1">Adicionar ao Carrinho</button>
                         </div>
                     </div>
                 </div>
@@ -91,7 +90,7 @@
                         <p class="description">Colar de prata com pingente em forma de onda</p>
                         <div class="product-actions">
                             <button class="btn-wishlist"><i class="far fa-heart"></i></button>
-                            <button class="btn-add-to-cart">Adicionar ao Carrinho</button>
+                            <button class="btn-add-to-cart" data-product-id="1">Adicionar ao Carrinho</button>
                         </div>
                     </div>
                 </div>
@@ -110,7 +109,7 @@
                         <p class="description">Anel de prata com detalhes em esmalte azul</p>
                         <div class="product-actions">
                             <button class="btn-wishlist"><i class="far fa-heart"></i></button>
-                            <button class="btn-add-to-cart">Adicionar ao Carrinho</button>
+                            <button class="btn-add-to-cart" data-product-id="1">Adicionar ao Carrinho</button>
                         </div>
                     </div>
                 </div>
@@ -160,3 +159,32 @@
     </script>
 </body>
 </html>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Adiciona evento de clique para todos os botões "Adicionar ao Carrinho"
+    document.querySelectorAll('.btn-add-to-cart').forEach(button => {
+        button.addEventListener('click', function() {
+            const productId = this.getAttribute('data-product-id');
+            
+            fetch(`/adicionar_carrinho/${productId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                credentials: 'same-origin'
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    window.location.href = data.redirect;
+                } else {
+                    alert(data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+    });
+});
+</script>
