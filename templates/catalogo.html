@@ -11,17 +11,15 @@
     <header class="main-header">
         <div class="container">
             <div class="header-main">
-                <div class="logo-container">
-                    <a href="/" class="logo">
-                        <img src="/images/logo mare de pratas.jpg" alt="Maré de Pratas">
+                 <div class="logo-container">
+                    <a href="#" class="logo">
+                        <img src="/images/logo mare de pratas sem nome.jpg" alt="">
                         <span>Maré de Pratas</span>
                     </a>
                 </div>
 
                 <div class="user-actions">
                     <a href="/templates/login.html"><i class="fas fa-sign-in-alt"></i></a>
-                    <a href="/templates/favoritos.html"><i class="far fa-heart"></i></a>
-                    <a href="/templates/carrinho.html"><i class="fas fa-shopping-bag"></i></a>
                 </div>
 
                 <div class="search-container">
@@ -37,17 +35,14 @@
             </div>
 
             <nav class="main-nav">
-                <ul>
-                    <li><a href="/templates/produtos.html">Produtos</a></li>
-                    <li><a href="/templates/sobre.html">Sobre</a></li>
-                </ul>
+                <a href="{{ url_for('listar_produtos') }}">Produtos</a>
+                <a href="{{ url_for('sobre') }}">Sobre</a>
             </nav>
 
             <nav class="mobile-nav">
                 <ul>
                     <li><a href="/templates/login.html"><i class="fas fa-sign-in-alt"></i> Login</a></li>
-                    <li><a href="/templates/favoritos.html"><i class="far fa-heart"></i> Favoritos</a></li>
-                    <li><a href="/templates/carrinho.html"><i class="fas fa-shopping-bag"></i> Carrinho</a></li>
+                    
                     <li><a href="/templates/sobre.html"><i class="fas fa-info-circle"></i> Sobre</a></li>
                 </ul>
             </nav>
@@ -72,8 +67,7 @@
                         </div>
                         <p class="description">Joia rara com detalhes em diamantes</p>
                         <div class="product-actions">
-                            <button class="btn-wishlist"><i class="far fa-heart"></i></button>
-                           <button class="btn-add-to-cart" data-product-id="1">Adicionar ao Carrinho</button>
+                           <a href="/finalizar_pedido?produto_id=1" class="btn-comprar">Comprar</a>
                         </div>
                     </div>
                 </div>
@@ -89,8 +83,7 @@
                         </div>
                         <p class="description">Colar de prata com pingente em forma de onda</p>
                         <div class="product-actions">
-                            <button class="btn-wishlist"><i class="far fa-heart"></i></button>
-                            <button class="btn-add-to-cart" data-product-id="1">Adicionar ao Carrinho</button>
+                           <a href="/finalizar_pedido?produto_id=1" class="btn-comprar">Comprar</a>
                         </div>
                     </div>
                 </div>
@@ -107,9 +100,8 @@
                             <span class="discount">R$ 95,00</span>
                         </div>
                         <p class="description">Anel de prata com detalhes em esmalte azul</p>
-                        <div class="product-actions">
-                            <button class="btn-wishlist"><i class="far fa-heart"></i></button>
-                            <button class="btn-add-to-cart" data-product-id="1">Adicionar ao Carrinho</button>
+                       <div class="product-actions">
+                           <a href="/finalizar_pedido?produto_id=1" class="btn-comprar">Comprar</a>
                         </div>
                     </div>
                 </div>

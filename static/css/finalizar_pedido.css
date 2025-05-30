@@ -1,0 +1,147 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #ffffff;
+    color: #333;
+}
+
+.main-header {
+    background-color: #3a8af1;
+    color: white;
+    padding: 10px 0;
+}
+
+.header-main {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 15px;
+}
+
+.logo-container img {
+    height: 50px;
+    vertical-align: middle;
+}
+
+.logo-container span {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-left: 10px;
+    color: white;
+}
+
+.user-actions i,
+.menu-toggle i {
+    font-size: 1.4rem;
+    color: white;
+    margin-left: 15px;
+    cursor: pointer;
+}
+
+h2.catalog-title {
+    color: #3a8af1;
+    font-size: 2rem;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.checkout-form {
+    background-color: #f8f8f8;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.checkout-section {
+    margin-bottom: 30px;
+}
+
+.checkout-section h3 {
+    color: #3a8af1;
+    margin-bottom: 15px;
+    font-size: 1.2rem;
+}
+
+.checkout-form input[type="text"],
+.checkout-form input[type="email"],
+.checkout-form input[type="number"] {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-sizing: border-box;
+    font-size: 1rem;
+}
+
+.checkout-form label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: bold;
+    cursor: pointer;
+    color: #333;
+}
+
+.checkout-form input[type="radio"] {
+    margin-right: 8px;
+    accent-color: #3a8af1;
+}
+
+.pagamento-detalhes {
+    background-color: #ffffff;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin-top: 10px;
+}
+
+.btn-comprar {
+    background-color: #3a8af1;
+    color: white;
+    border: none;
+    padding: 14px 28px;
+    font-size: 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-comprar:hover {
+    background-color: #3275d0;
+}
+
+.main-footer {
+    background-color: #3a8af1;
+    color: white;
+    padding: 30px 0;
+    margin-top: 60px;
+}
+
+.footer-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.footer-info p {
+    margin: 5px 0;
+    font-size: 0.95rem;
+}
+
+.social-icons a {
+    color: white;
+    font-size: 1.5rem;
+    margin-right: 15px;
+    transition: color 0.3s ease;
+}
+
+.social-icons a:hover {
+    color: #d1e8ff;
+}
