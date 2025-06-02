@@ -4,26 +4,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Maré de Pratas - Catálogo</title>
-    <link rel="stylesheet" href="/static/css/catalogo.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/catalogo.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
     <header class="main-header">
         <div class="container">
             <div class="header-main">
-                 <div class="logo-container">
-                    <a href="#" class="logo">
-                        <img src="/images/logo mare de pratas sem nome.jpg" alt="">
+                <div class="logo-container">
+                    <a href="{{ url_for('catalogo') }}" class="logo">
+                        <img src="{{ url_for('static', filename='images/logo mare de pratas sem nome.jpg') }}" alt="">
                         <span>Maré de Pratas</span>
                     </a>
                 </div>
 
+                <!-- Ações do usuário -->
                 <div class="user-actions">
-                    <a href="/templates/login.html"><i class="fas fa-sign-in-alt"></i></a>
+                        <span class="user-name"><i class="fas fa-user"></i> {{ nome_usuario }}</span>
+                        <a href="{{ url_for('logout') }}" title="Logout"><i class="fas fa-sign-out-alt"></i></a>
+                        <a href="{{ url_for('login') }}" title="Login"><i class="fas fa-sign-in-alt"></i></a>
                 </div>
 
                 <div class="search-container">
-                    <form action="/busca" method="GET">
+                    <form action="{{ url_for('listar_produtos') }}" method="GET">
                         <input type="text" placeholder="Buscar produtos..." name="q">
                         <button type="submit"><i class="fas fa-search"></i></button>
                     </form>
@@ -41,142 +44,84 @@
 
             <nav class="mobile-nav">
                 <ul>
-                    <li><a href="/templates/login.html"><i class="fas fa-sign-in-alt"></i> Login</a></li>
-                    
-                    <li><a href="/templates/sobre.html"><i class="fas fa-info-circle"></i> Sobre</a></li>
+                        <li><a href="#"><i class="fas fa-user"></i> {{ nome_usuario }}</a></li>
+                        <li><a href="{{ url_for('logout') }}"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+                        <li><a href="{{ url_for('login') }}"><i class="fas fa-sign-in-alt"></i> Login</a></li>
+                    <li><a href="{{ url_for('sobre') }}"><i class="fas fa-info-circle"></i> Sobre</a></li>
                 </ul>
             </nav>
         </div>
     </header>
 
+   
     <main>
         <div class="container">
             <h2 class="catalog-title">Catálogo de Produtos</h2>
 
             <div class="products-grid">
+              
                 <div class="product-card">
                     <div class="product-image">
-                        <img src="/static/images/pulseira.jpg" alt="Pulseira de prata">
+                        <img src="{{ url_for('static', filename='images/' + produto.imagem) }}" alt="{{ produto.nome }}">
+                       
                         <div class="product-badge">Novo</div>
-                    </div>
-                    <div class="product-info">
-                        <h3>Pulseira de Prata</h3>
-                        <div class="price-container">
-                            <p class="price">R$ 90,00</p>
-                            <span class="discount">R$ 120,00</span>
-                        </div>
-                        <p class="description">Joia rara com detalhes em diamantes</p>
-                        <div class="product-actions">
-                           <a href="/finalizar_pedido?produto_id=1" class="btn-comprar">Comprar</a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="product-card">
-                    <div class="product-image">
-                        <img src="/static/images/colar.jpg" alt="Colar de prata">
-                    </div>
-                    <div class="product-info">
-                        <h3>Colar Marinho</h3>
-                        <div class="price-container">
-                            <p class="price">R$ 150,00</p>
-                        </div>
-                        <p class="description">Colar de prata com pingente em forma de onda</p>
-                        <div class="product-actions">
-                           <a href="/finalizar_pedido?produto_id=1" class="btn-comprar">Comprar</a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="product-card">
-                    <div class="product-image">
-                        <img src="/static/images/anel.jpg" alt="Anel de prata">
+                       
                         <div class="product-badge">-20%</div>
+                       
                     </div>
                     <div class="product-info">
-                        <h3>Anel Oceânico</h3>
+                        <h3>{{ produto.nome }}</h3>
                         <div class="price-container">
-                            <p class="price">R$ 75,00</p>
+                            <p class="price">R$ {{ "%.2f"|format(produto.preco) }}</p>
+                           
+                            <span class="discount">R$ 120,00</span>
+                          
                             <span class="discount">R$ 95,00</span>
+                           
                         </div>
-                        <p class="description">Anel de prata com detalhes em esmalte azul</p>
-                       <div class="product-actions">
-                           <a href="/finalizar_pedido?produto_id=1" class="btn-comprar">Comprar</a>
+                        <p class="description">{{ produto.descricao }}</p>
+                        <div class="product-actions">
+                            <a href="{{ url_for('comprar_produto', produto_id=produto.id) }}" class="btn-comprar">Comprar</a>
                         </div>
                     </div>
                 </div>
+              
             </div>
         </div>
     </main>
 
-     <footer class="main-footer">
+    <!-- Rodapé -->
+    <footer class="main-footer">
         <div class="container">
             <div class="footer-container">
-                <div class="footer-content">
-                    <div class="footer-info">
-                        <p><i class="fas fa-gem"></i> Joias em prata 950</p>
-                        <p><i class="fas fa-phone"></i> (85) 98224-6332</p>
-                    </div>
+                <div class="footer-info">
+                    <p><i class="fas fa-gem"></i> Joias em prata 950</p>
+                    <p><i class="fas fa-phone"></i> (85) 98224-6332</p>
                 </div>
-                
-                <div class="social-container">
-                    <div class="social-icons">
-                        <a href="https://www.instagram.com/mare_depratas?igsh=bDBsbXhwY3N5NmQ2"><i class="fab fa-instagram"></i></a>
-                        <a href="https://api.whatsapp.com/send/?phone=5585982246332&text&type=phone_number&app_absent=0"><i class="fab fa-whatsapp"></i></a>
-                    </div>
+                <div class="social-icons">
+                    <a href="https://www.instagram.com/mare_depratas?igsh=bDBsbXhwY3N5NmQ2"><i class="fab fa-instagram"></i></a>
+                    <a href="https://api.whatsapp.com/send/?phone=5585982246332"><i class="fab fa-whatsapp"></i></a>
                 </div>
             </div>
         </div>
     </footer>
 
+    <!-- JS: menu e hover -->
     <script>
-        // Menu mobile
         document.querySelector('.menu-toggle').addEventListener('click', function () {
             document.querySelector('.mobile-nav').classList.toggle('active');
             this.querySelector('i').classList.toggle('fa-times');
             this.querySelector('i').classList.toggle('fa-bars');
         });
 
-        // Hover nos cards
-        const productCards = document.querySelectorAll('.product-card');
-        productCards.forEach(card => {
-            card.addEventListener('mouseenter', function () {
-                this.querySelector('.product-actions').style.opacity = '1';
+        document.querySelectorAll('.product-card').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.querySelector('.product-actions').style.opacity = '1';
             });
-
-            card.addEventListener('mouseleave', function () {
-                this.querySelector('.product-actions').style.opacity = '0';
+            card.addEventListener('mouseleave', () => {
+                card.querySelector('.product-actions').style.opacity = '0';
             });
         });
     </script>
 </body>
 </html>
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    // Adiciona evento de clique para todos os botões "Adicionar ao Carrinho"
-    document.querySelectorAll('.btn-add-to-cart').forEach(button => {
-        button.addEventListener('click', function() {
-            const productId = this.getAttribute('data-product-id');
-            
-            fetch(`/adicionar_carrinho/${productId}`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                credentials: 'same-origin'
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    window.location.href = data.redirect;
-                } else {
-                    alert(data.message);
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
-        });
-    });
-});
-</script>

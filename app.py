@@ -3,11 +3,12 @@ from werkzeug.security import generate_password_hash, check_password_hash
 import re
 import os
 
-# Configuração inicial do Flask
 app = Flask(__name__)
 app.secret_key = 'sua_chave_secreta_super_segura_aqui'
 
-# Banco de dados em memória
+def obter_produtos():
+    return produtos
+
 usuarios = [
     {
         'email': 'admin@mare.com',
@@ -43,13 +44,12 @@ produtos = [
 
 @app.before_request
 def inicializar_sessao():
-    pass  # Nada mais necessário aqui
+    pass
 
+# Acesso direto à página do catálogo (público)
 @app.route('/')
 def index():
-    if 'usuario_logado' in session:
-        return redirect(url_for('catalogo'))
-    return redirect(url_for('login'))
+    return redirect(url_for('catalogo'))
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -113,26 +113,27 @@ def logout():
     flash('Você foi desconectado', 'info')
     return redirect(url_for('login'))
 
+# Catálogo público (sem necessidade de login)
 @app.route('/catalogo')
 def catalogo():
-    if 'usuario_logado' not in session:
-        flash('Por favor, faça login para acessar o catálogo', 'erro')
-        return redirect(url_for('login'))
-    return render_template('catalogo.html', produtos=produtos)
+    produtos_lista = obter_produtos()
+    nome_usuario = session['usuario_logado']['nome'] if 'usuario_logado' in session else None
+    return render_template('catalogo.html', produtos=produtos_lista, nome_usuario=nome_usuario)
+
+
+
 
 @app.route('/produtos')
 def listar_produtos():
     if 'usuario_logado' not in session:
         flash('Por favor, faça login para acessar os produtos', 'erro')
         return redirect(url_for('login'))
-    return render_template('produtos', produtos=produtos)
+    return render_template('produtos.html', produtos=produtos)
 
 @app.route('/sobre')
 def sobre():
-    return render_template('sobre')
+    return render_template('sobre.html')
 
-
-# Nova rota para finalizar pedido
 @app.route('/comprar/<int:produto_id>', methods=['POST'])
 def comprar_produto(produto_id):
     if 'usuario_logado' not in session:
@@ -144,7 +145,6 @@ def comprar_produto(produto_id):
         flash('Produto não encontrado', 'erro')
         return redirect(url_for('catalogo'))
 
-    # Armazenar produto selecionado na sessão (ou passar via query string/post)
     session['produto_selecionado'] = produto
     return redirect(url_for('finalizar_pedido'))
 
@@ -162,9 +162,6 @@ def finalizar_pedido():
 
     return render_template('finalizar_pedido.html', produto=produto)
 
-
-
-# Ponto de entrada
 if __name__ == '__main__':
     os.makedirs('templates', exist_ok=True)
     os.makedirs('static/images', exist_ok=True)
