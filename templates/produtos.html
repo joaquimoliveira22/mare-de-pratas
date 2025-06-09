@@ -30,8 +30,6 @@
                     </div>
                     
                     <div class="user-actions">
-                        <a href="/templates/favoritos.html"><i class="fas fa-heart"></i></a>
-                        <a href="/templates/carrinho.html"><i class="fas fa-shopping-bag"></i></a>
                         <a href="/templates/login.html"><i class="fas fa-user"></i></a>
                     </div>
                 </div>
@@ -50,56 +48,34 @@
                 <p>Descubra peças únicas que combinam com seu estilo</p>
             </section>
 
-            <div class="filters">
-                <div class="filter-group">
-                    <label for="category">Categoria:</label>
-                    <select id="category">
-                        <option value="all">Todas</option>
-                        <option value="anel">Anéis</option>
-                        <option value="colar">Colares</option>
-                        <option value="pulseira">Pulseiras</option>
-                        <option value="brinco">Brincos</option>
-                    </select>
-                </div>
-                <div class="filter-group">
-                    <label for="price">Preço:</label>
-                    <select id="price">
-                        <option value="all">Todos</option>
-                        <option value="0-100">Até R$ 100</option>
-                        <option value="100-200">R$ 100 - R$ 200</option>
-                        <option value="200+">Acima de R$ 200</option>
-                    </select>
-                </div>
-            </div>
+            
 
             <div class="products-grid">
                 <div class="product-card">
                     <div class="product-badge">Novo</div>
                     <div class="product-image">
-                        <img src="/images/produto1.jpg" alt="Anel de Prata com Zircônia">
+                        <img src="/images/anel.jpg" alt="Anel de Prata com Zircônia">
                     </div>
                     <div class="product-info">
                         <h3>Anel Estrela do Mar</h3>
                         <div class="price">R$ 129,90</div>
                         <div class="installment">ou 3x de R$ 43,30</div>
                         <div class="product-actions">
-                            <button class="btn-wishlist"><i class="far fa-heart"></i></button>
-                            <button class="btn-add-to-cart">Comprar</button>
+                        <a href="/templates/finalizar_pedido.html" class="btn-comprar">Comprar</a>
                         </div>
                     </div>
                 </div>
 
                 <div class="product-card">
                     <div class="product-image">
-                        <img src="/images/produto2.jpg" alt="Colar de Prata">
+                        <img src="/images/colar.jpg" alt="Colar de Prata">
                     </div>
                     <div class="product-info">
                         <h3>Colar Onda do Mar</h3>
                         <div class="price">R$ 159,90</div>
                         <div class="installment">ou 4x de R$ 39,98</div>
                         <div class="product-actions">
-                            <button class="btn-wishlist"><i class="far fa-heart"></i></button>
-                            <button class="btn-add-to-cart">Comprar</button>
+                        <a href="/templates/finalizar_pedido.html" class="btn-comprar">Comprar</a>
                         </div>
                     </div>
                 </div>
@@ -107,45 +83,42 @@
                 <div class="product-card">
                     <div class="product-badge">-20%</div>
                     <div class="product-image">
-                        <img src="/images/produto3.jpg" alt="Pulseira de Prata">
+                        <img src="/images/pulseira prata.jpg" alt="Pulseira de Prata">
                     </div>
                     <div class="product-info">
                         <h3>Pulseira Concha</h3>
                         <div class="price">R$ 99,90 <span class="old-price">R$ 124,90</span></div>
                         <div class="installment">ou 2x de R$ 49,95</div>
                         <div class="product-actions">
-                            <button class="btn-wishlist"><i class="far fa-heart"></i></button>
-                            <button class="btn-add-to-cart">Comprar</button>
+                        <a href="/templates/finalizar_pedido.html" class="btn-comprar">Comprar</a>
                         </div>
                     </div>
                 </div>
 
                 <div class="product-card">
                     <div class="product-image">
-                        <img src="/images/produto4.jpg" alt="Brinco de Prata">
+                        <img src="/images/brincos.jpg" alt="Brinco de Prata">
                     </div>
                     <div class="product-info">
                         <h3>Brincos Pérola</h3>
                         <div class="price">R$ 89,90</div>
                         <div class="installment">ou 2x de R$ 44,95</div>
                         <div class="product-actions">
-                            <button class="btn-wishlist"><i class="far fa-heart"></i></button>
-                            <button class="btn-add-to-cart">Comprar</button>
+                        <a href="/templates/finalizar_pedido.html" class="btn-comprar">Comprar</a>
                         </div>
                     </div>
                 </div>
 
                 <div class="product-card">
                     <div class="product-image">
-                        <img src="/images/produto5.jpg" alt="Conjunto de Joias">
+                        <img src="/images/conjunto_de_joias.jpg" alt="Conjunto de Joias">
                     </div>
                     <div class="product-info">
                         <h3>Kit Verão</h3>
                         <div class="price">R$ 229,90</div>
                         <div class="installment">ou 5x de R$ 45,98</div>
                         <div class="product-actions">
-                            <button class="btn-wishlist"><i class="far fa-heart"></i></button>
-                            <button class="btn-add-to-cart">Comprar</button>
+                        <a href="/templates/finalizar_pedido.html" class="btn-comprar">Comprar</a>
                         </div>
                     </div>
                 </div>
@@ -153,15 +126,14 @@
                 <div class="product-card">
                     <div class="product-badge">Mais Vendido</div>
                     <div class="product-image">
-                        <img src="/images/produto6.jpg" alt="Anel de Prata">
+                        <img src="/images/anel_infinito.jpg" alt="Anel de Prata">
                     </div>
                     <div class="product-info">
                         <h3>Anel Infinito</h3>
                         <div class="price">R$ 149,90</div>
                         <div class="installment">ou 3x de R$ 49,97</div>
                         <div class="product-actions">
-                            <button class="btn-wishlist"><i class="far fa-heart"></i></button>
-                            <button class="btn-add-to-cart">Comprar</button>
+                        <a href="/templates/finalizar_pedido.html" class="btn-comprar">Comprar</a>
                         </div>
                     </div>
                 </div>
@@ -174,7 +146,7 @@
             <div class="footer-content">
                 <div class="footer-section">
                     <h3>Maré de Pratas</h3>
-                    <p>Joias em prata 950 com design exclusivo e qualidade premium.</p>
+                    <p>Joias em prata com design exclusivo e qualidade premium.</p>
                 </div>
                 <div class="footer-section">
                     <h3>Contato</h3>
@@ -190,7 +162,7 @@
                 </div>
             </div>
             <div class="copyright">
-                <p>&copy; 2023 Maré de Pratas. Todos os direitos reservados.</p>
+                <p>&copy; 2024 Maré de Pratas. Todos os direitos reservados.</p>
             </div>
         </div>
     </footer>

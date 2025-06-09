@@ -1,180 +1,76 @@
-from flask import Flask, render_template, request, redirect, url_for, flash, session
+from flask import Flask, render_template, request, redirect, url_for, session, flash
+from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
-import re
-import os
 
 app = Flask(__name__)
-app.secret_key = 'sua_chave_secreta_super_segura_aqui'
+app.secret_key = 'segredo_super_secreto'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///usuarios.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+db = SQLAlchemy(app)
 
-def obter_produtos():
-    return produtos
+# Tabela de Usuários
+class Usuario(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    nome_completo = db.Column(db.String(100), nullable=False)
+    telefone = db.Column(db.String(20), nullable=False)
+    email = db.Column(db.String(100), unique=True, nullable=False)
+    senha = db.Column(db.String(200), nullable=False)
 
-usuarios = [
-    {
-        'email': 'admin@mare.com',
-        'senha_hash': generate_password_hash('admin123'),
-        'nome': 'Administrador',
-        'telefone': '(85) 98224-6332'
-    }
-]
-
-produtos = [
-    {
-        'id': 1,
-        'nome': 'Pulseira de Prata',
-        'preco': 90.00,
-        'imagem': 'pulseira.jpg',
-        'descricao': 'Joia rara com detalhes em diamantes'
-    },
-    {
-        'id': 2,
-        'nome': 'Colar Marinho',
-        'preco': 150.00,
-        'imagem': 'colar.jpg',
-        'descricao': 'Colar de prata com pingente em forma de onda'
-    },
-    {
-        'id': 3,
-        'nome': 'Anel Oceânico',
-        'preco': 75.00,
-        'imagem': 'anel.jpg',
-        'descricao': 'Anel de prata com detalhes em esmalte azul'
-    }
-]
-
-@app.before_request
-def inicializar_sessao():
-    pass
-
-# Acesso direto à página do catálogo (público)
+# Página inicial: Catálogo
 @app.route('/')
-def index():
-    return redirect(url_for('catalogo'))
+def catalogo():
+    nome_usuario = session.get('nome_usuario')
+    return render_template('catalogo.html', nome_usuario=nome_usuario)
 
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-    if request.method == 'POST':
-        email = request.form.get('email')
-        senha = request.form.get('senha')
-
-        if not email or not senha:
-            flash('Preencha todos os campos', 'erro')
-            return redirect(url_for('login'))
-
-        usuario = next((u for u in usuarios if u['email'] == email), None)
-
-        if usuario and check_password_hash(usuario['senha_hash'], senha):
-            session['usuario_logado'] = {
-                'email': usuario['email'],
-                'nome': usuario['nome']
-            }
-            flash('Login realizado com sucesso!', 'sucesso')
-            return redirect(url_for('catalogo'))
-
-        flash('Email ou senha incorretos', 'erro')
-
-    return render_template('login.html')
-
+# Página de Registro
 @app.route('/registro', methods=['GET', 'POST'])
 def registro():
     if request.method == 'POST':
-        nome = request.form.get('nome_completo')
-        telefone = request.form.get('telefone')
-        email = request.form.get('email')
-        senha = request.form.get('senha')
+        nome = request.form['nome_completo']
+        telefone = request.form['telefone']
+        email = request.form['email']
+        senha = generate_password_hash(request.form['senha'])
 
-        if not all([nome, telefone, email, senha]):
-            flash('Preencha todos os campos', 'erro')
+        if Usuario.query.filter_by(email=email).first():
+            flash('Email já cadastrado!', 'error')
             return redirect(url_for('registro'))
 
-        if not re.match(r"\(\d{2}\) \d{4,5}-\d{4}", telefone):
-            flash("Telefone inválido. Use o formato (99) 99999-9999.", "erro")
-            return redirect(url_for('registro'))
-
-        if any(u['email'] == email for u in usuarios):
-            flash("Email já cadastrado.", "erro")
-            return redirect(url_for('registro'))
-
-        usuarios.append({
-            'nome': nome,
-            'telefone': telefone,
-            'email': email,
-            'senha_hash': generate_password_hash(senha)
-        })
-
-        flash("Cadastro realizado com sucesso!", "sucesso")
+        novo_usuario = Usuario(nome_completo=nome, telefone=telefone, email=email, senha=senha)
+        db.session.add(novo_usuario)
+        db.session.commit()
+        flash('Cadastro realizado com sucesso!', 'success')
         return redirect(url_for('login'))
 
     return render_template('registro.html')
 
+# Página de Login
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        email = request.form['email']
+        senha = request.form['senha']
+        usuario = Usuario.query.filter_by(email=email).first()
+
+        if usuario and check_password_hash(usuario.senha, senha):
+            session['nome_usuario'] = usuario.nome_completo
+            return redirect(url_for('catalogo'))
+        else:
+            flash('Email ou senha inválidos!', 'error')
+            return redirect(url_for('login'))
+
+    return render_template('login.html')
+
+# Logout
 @app.route('/logout')
 def logout():
     session.clear()
-    flash('Você foi desconectado', 'info')
-    return redirect(url_for('login'))
+    return redirect(url_for('catalogo'))
 
-# Catálogo público (sem necessidade de login)
-@app.route('/catalogo')
-def catalogo():
-    produtos_lista = obter_produtos()
-    nome_usuario = session['usuario_logado']['nome'] if 'usuario_logado' in session else None
-    return render_template('catalogo.html', produtos=produtos_lista, nome_usuario=nome_usuario)
-
-
-
-
-@app.route('/produtos')
+@app.route('/listar_produtos')
 def listar_produtos():
-    if 'usuario_logado' not in session:
-        flash('Por favor, faça login para acessar os produtos', 'erro')
-        return redirect(url_for('login'))
-    return render_template('produtos.html', produtos=produtos)
-
-@app.route('/sobre')
-def sobre():
-    return render_template('sobre.html')
-
-@app.route('/comprar/<int:produto_id>', methods=['POST'])
-def comprar_produto(produto_id):
-    if 'usuario_logado' not in session:
-        flash('Faça login primeiro', 'erro')
-        return redirect(url_for('login'))
-
-    produto = next((p for p in produtos if p['id'] == produto_id), None)
-    if not produto:
-        flash('Produto não encontrado', 'erro')
-        return redirect(url_for('catalogo'))
-
-    session['produto_selecionado'] = produto
-    return redirect(url_for('finalizar_pedido'))
-
-@app.route('/finalizar_pedido', methods=['GET', 'POST'])
-def finalizar_pedido():
-    if 'usuario_logado' not in session:
-        flash('Faça login primeiro', 'erro')
-        return redirect(url_for('login'))
-
-    produto = session.get('produto_selecionado')
-
-    if request.method == 'POST':
-        flash('Pedido finalizado com sucesso!', 'sucesso')
-        return redirect(url_for('catalogo'))
-
-    return render_template('finalizar_pedido.html', produto=produto)
+    return redirect(url_for('catalogo'))
 
 if __name__ == '__main__':
-    os.makedirs('templates', exist_ok=True)
-    os.makedirs('static/images', exist_ok=True)
-
-    required_templates = [
-        'login.html', 'registro.html', 'catalogo.html',
-        'produtos.html', 'finalizar_pedido.html', 'sobre.html'
-    ]
-
-    for template in required_templates:
-        template_path = os.path.join('templates', template)
-        if not os.path.exists(template_path):
-            with open(template_path, 'w') as f:
-                f.write(f"<!-- Template {template} -->")
-
-    app.run(debug=True, port=5000)
+    with app.app_context():
+        db.create_all()
+    app.run(debug=True)

@@ -299,7 +299,7 @@ body {
     color: #ff4757;
 }
 
-.btn-add-to-cart {
+.btn-comprar {
     background-color: #3a8af1;
     color: white;
     border: none;
@@ -310,7 +310,7 @@ body {
     transition: background-color 0.3s;
 }
 
-.btn-add-to-cart:hover {
+.btn-comprar:hover {
     background-color: #3a8af1;
 }
     

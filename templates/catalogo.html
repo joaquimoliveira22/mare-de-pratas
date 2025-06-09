@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Maré de Pratas - Catálogo</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/catalogo.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/catalogo.css') }}">
 </head>
 <body>
     <header class="main-header">
@@ -18,11 +18,10 @@
                     </a>
                 </div>
 
-                <!-- Ações do usuário -->
                 <div class="user-actions">
-                        <span class="user-name"><i class="fas fa-user"></i> {{ nome_usuario }}</span>
-                        <a href="{{ url_for('logout') }}" title="Logout"><i class="fas fa-sign-out-alt"></i></a>
-                        <a href="{{ url_for('login') }}" title="Login"><i class="fas fa-sign-in-alt"></i></a>
+                    <span class="user-name"><i class="fas fa-user"></i> {{ nome_usuario }}</span>
+                    <a href="{{ url_for('logout') }}" title="Logout"><i class="fas fa-sign-out-alt"></i></a>
+                    <a href="{{ url_for('login') }}" title="Login"><i class="fas fa-sign-in-alt"></i></a>
                 </div>
 
                 <div class="search-container">
@@ -38,54 +37,81 @@
             </div>
 
             <nav class="main-nav">
-                <a href="{{ url_for('listar_produtos') }}">Produtos</a>
-                <a href="{{ url_for('sobre') }}">Sobre</a>
+                <a href="/templates/produtos.html"><i class="fas fa-gem"></i>Produtos</a>
+                <a href="/templates/sobre.html"><i class="fas fa-info-circle"></i> Sobre</a>
             </nav>
 
             <nav class="mobile-nav">
                 <ul>
-                        <li><a href="#"><i class="fas fa-user"></i> {{ nome_usuario }}</a></li>
-                        <li><a href="{{ url_for('logout') }}"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
-                        <li><a href="{{ url_for('login') }}"><i class="fas fa-sign-in-alt"></i> Login</a></li>
-                    <li><a href="{{ url_for('sobre') }}"><i class="fas fa-info-circle"></i> Sobre</a></li>
+                    <li><a href="#"><i class="fas fa-user"></i> {{ nome_usuario }}</a></li>
+                    <li><a href="/templates/registro.html"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+                    <li><a href="/templates/login.html"><i class="fas fa-sign-in-alt"></i> Login</a></li>
                 </ul>
             </nav>
         </div>
     </header>
 
-   
     <main>
         <div class="container">
             <h2 class="catalog-title">Catálogo de Produtos</h2>
 
             <div class="products-grid">
-              
+
+                <!-- Produto 1 -->
                 <div class="product-card">
                     <div class="product-image">
-                        <img src="{{ url_for('static', filename='images/' + produto.imagem) }}" alt="{{ produto.nome }}">
-                       
+                        <img src="{{ url_for('static', filename='images/anel.jpg') }}" alt="">
                         <div class="product-badge">Novo</div>
-                       
                         <div class="product-badge">-20%</div>
-                       
                     </div>
                     <div class="product-info">
-                        <h3>{{ produto.nome }}</h3>
+                        <h3>Anel</h3>
                         <div class="price-container">
-                            <p class="price">R$ {{ "%.2f"|format(produto.preco) }}</p>
-                           
+                            <p class="price">R$ 90</p>
                             <span class="discount">R$ 120,00</span>
-                          
-                            <span class="discount">R$ 95,00</span>
-                           
                         </div>
-                        <p class="description">{{ produto.descricao }}</p>
+                        <p class="description">Anel de ouro, com detalhes em diamante revestidos de titânio.</p>
                         <div class="product-actions">
-                            <a href="{{ url_for('comprar_produto', produto_id=produto.id) }}" class="btn-comprar">Comprar</a>
+                            <a href="/templates/finalizar_pedido.html" class="btn-comprar">Comprar</a>
                         </div>
                     </div>
                 </div>
-              
+
+                <!-- Produto 2 -->
+                <div class="product-card">
+                    <div class="product-image">
+                        <img src="{{ url_for('static', filename='images/pulseira prata.jpg') }}" alt="">
+                    </div>
+                    <div class="product-info">
+                        <h3>Pulseira</h3>
+                        <div class="price-container">
+                            <p class="price">R$ 45</p>
+                        </div>
+                        <p class="description">Pulseira de prata.</p>
+                        <div class="product-actions">
+                            <a href="/templates/finalizar_pedido.html" class="btn-comprar">Comprar</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Produto 3 -->
+                <div class="product-card">
+                    <div class="product-image">
+                        <img src="{{ url_for('static', filename='images/colar.jpg') }}" alt="">
+                        <div class="product-badge">Novo</div>
+                    </div>
+                    <div class="product-info">
+                        <h3>Colar</h3>
+                        <div class="price-container">
+                            <p class="price">R$ 250</p>
+                        </div>
+                        <p class="description">Colar de prata com pingente em diamante.</p>
+                        <div class="product-actions">
+                            <a href="/templates/finalizar_pedido.html" class="btn-comprar">Comprar</a>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
     </main>

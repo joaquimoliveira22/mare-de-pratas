@@ -1,106 +1,37 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Finalizar Pedido - Maré de Pratas</title>
+    <title>Finalizar Pedido</title>
     <link rel="stylesheet" href="/static/css/finalizar_pedido.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
-    <header class="main-header">
-        <div class="container">
-            <div class="header-main">
-                <div class="logo-container">
-                        <img src="/images/logo mare de pratas sem nome.jpg" alt="">
-                        <span>Maré de Pratas</span>
-                    </a>
-                </div>
+    <div class="container">
+         <button href="/templates/catalogo.html" class="btn-voltar">Voltar</button>
+        <h2>Finalizar Pedido</h2>
+        <form method="POST">
+            <label for="nome">Nome completo:</label>
+            <input type="text" id="nome" name="nome" required>
 
-                <div class="user-actions">
-                    <a href="/logout"><i class="fas fa-sign-out-alt"></i></a>
-                </div>
-            </div>
-        </div>
-    </header>
+            <label for="email">E-mail:</label>
+            <input type="email" id="email" name="email" required>
 
-    <main>
-        <div class="container">
-            <h2 class="catalog-title">Finalizar Pedido</h2>
+            <label for="telefone">Telefone:</label>
+            <input type="text" id="telefone" name="telefone" placeholder="(99) 99999-9999" required>
 
-            <form method="POST" action="/finalizar_pedido" class="checkout-form">
-                <div class="checkout-section">
-                    <h3>Informações do Cliente</h3>
-                    <input type="text" name="nome" placeholder="Nome completo" required>
-                    <input type="email" name="email" placeholder="E-mail" required>
-                    <input type="text" name="telefone" placeholder="Telefone" required>
-                    <input type="text" name="endereco" placeholder="Endereço de entrega" required>
-                </div>
+            <label for="endereco">Endereço de entrega:</label>
+            <input type="text" id="endereco" name="endereco" required>
 
-                <div class="checkout-section">
-                    <h3>Forma de Pagamento</h3>
+            <label for="pagamento">Forma de pagamento:</label>
+            <select id="pagamento" name="pagamento" required>
+                <option value="">Selecione</option>
+                <option value="pix">Pix</option>
+                <option value="cartao">Cartão de Crédito</option>
+                <option value="boleto">Boleto</option>
+            </select>
 
-                    <label>
-                        <input type="radio" name="pagamento" value="pix" checked>
-                        <i class="fas fa-qrcode"></i> PIX
-                    </label>
-                    <div class="pagamento-detalhes pix">
-                        <p>Chave PIX: <strong>maredepratas@pix.com</strong></p>
-                        <img src="/static/images/qrcode_pix_exemplo.png" alt="QR Code PIX" style="max-width: 200px; margin-top: 10px;">
-                    </div>
-
-                    <label>
-                        <input type="radio" name="pagamento" value="cartao">
-                        <i class="far fa-credit-card"></i> Cartão de Crédito / Débito
-                    </label>
-                    <div class="pagamento-detalhes cartao" style="display: none;">
-                        <input type="text" name="numero_cartao" placeholder="Número do cartão">
-                        <input type="text" name="nome_cartao" placeholder="Nome no cartão">
-                        <input type="text" name="validade" placeholder="Validade (MM/AA)">
-                        <input type="text" name="cvv" placeholder="CVV">
-                    </div>
-                </div>
-
-                <div class="checkout-section">
-                    <button type="submit" class="btn-comprar">Confirmar Pedido</button>
-                </div>
-            </form>
-        </div>
-    </main>
-
-    <footer class="main-footer">
-        <div class="container">
-            <div class="footer-container">
-                <div class="footer-info">
-                    <p><i class="fas fa-gem"></i> Joias em prata 950</p>
-                    <p><i class="fas fa-phone"></i> (85) 98224-6332</p>
-                </div>
-
-                <div class="social-icons">
-                    <a href="https://www.instagram.com/mare_depratas?igsh=bDBsbXhwY3N5NmQ2"><i class="fab fa-instagram"></i></a>
-                    <a href="https://api.whatsapp.com/send/?phone=5585982246332"><i class="fab fa-whatsapp"></i></a>
-                </div>
-            </div>
-        </div>
-    </footer>
-
-    <script>
-        const radioPix = document.querySelector('input[value="pix"]');
-        const radioCartao = document.querySelector('input[value="cartao"]');
-        const detalhesPix = document.querySelector('.pagamento-detalhes.pix');
-        const detalhesCartao = document.querySelector('.pagamento-detalhes.cartao');
-
-        document.querySelectorAll('input[name="pagamento"]').forEach(input => {
-            input.addEventListener('change', () => {
-                if (radioPix.checked) {
-                    detalhesPix.style.display = 'block';
-                    detalhesCartao.style.display = 'none';
-                } else {
-                    detalhesPix.style.display = 'none';
-                    detalhesCartao.style.display = 'block';
-                }
-            });
-        });
-    </script>
+            <button type="submit" class="btn-finalizar">Confirmar Pedido</button>
+        </form>
+    </div>
 </body>
 </html>
