@@ -66,9 +66,28 @@ def logout():
     session.clear()
     return redirect(url_for('catalogo'))
 
+# Redireciona para o catálogo
 @app.route('/listar_produtos')
 def listar_produtos():
     return redirect(url_for('catalogo'))
+
+# Página de Produtos
+@app.route('/produtos')
+def produtos():
+    nome_usuario = session.get('nome_usuario')
+    return render_template('produtos.html', nome_usuario=nome_usuario)
+
+# Página Sobre
+@app.route('/sobre')
+def sobre():
+    nome_usuario = session.get('nome_usuario')
+    return render_template('sobre.html', nome_usuario=nome_usuario)
+
+@app.route('/finalizar_pedido')
+def finalizar_pedido():
+    nome_usuario = session.get('nome_usuario')
+    return render_template('finalizar_pedido.html', nome_usuario=nome_usuario)
+
 
 if __name__ == '__main__':
     with app.app_context():

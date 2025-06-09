@@ -12,15 +12,15 @@
         <div class="container">
             <div class="header-main">
                 <div class="logo-container">
-                    <a href="{{ url_for('catalogo') }}" class="logo">
-                        <img src="{{ url_for('static', filename='images/logo mare de pratas sem nome.jpg') }}" alt="">
+                    <a href="" class="logo">
+                        <img src="/images/logo mare de pratas sem nome.jpg" alt="">
                         <span>Maré de Pratas</span>
                     </a>
                 </div>
 
                 <div class="user-actions">
                     <span class="user-name"><i class="fas fa-user"></i> {{ nome_usuario }}</span>
-                    <a href="{{ url_for('logout') }}" title="Logout"><i class="fas fa-sign-out-alt"></i></a>
+                    <a href="{{ url_for('registro') }}" title="Logout"><i class="fas fa-sign-out-alt"></i></a>
                     <a href="{{ url_for('login') }}" title="Login"><i class="fas fa-sign-in-alt"></i></a>
                 </div>
 
@@ -37,8 +37,11 @@
             </div>
 
             <nav class="main-nav">
-                <a href="/templates/produtos.html"><i class="fas fa-gem"></i>Produtos</a>
-                <a href="/templates/sobre.html"><i class="fas fa-info-circle"></i> Sobre</a>
+                <a href="{{ url_for('produtos') }}"> 
+                <i class="fas fa-gem"> </i> Produtos</a> 
+
+                <a href="{{ url_for('sobre') }}">
+                <i class="fas fa-info-circle"> </i> Sobre</a>
             </nav>
 
             <nav class="mobile-nav">
@@ -57,10 +60,9 @@
 
             <div class="products-grid">
 
-                <!-- Produto 1 -->
                 <div class="product-card">
                     <div class="product-image">
-                        <img src="{{ url_for('static', filename='images/anel.jpg') }}" alt="">
+                        <img src="/images/anel.jpg" alt="">
                         <div class="product-badge">Novo</div>
                         <div class="product-badge">-20%</div>
                     </div>
@@ -72,7 +74,7 @@
                         </div>
                         <p class="description">Anel de ouro, com detalhes em diamante revestidos de titânio.</p>
                         <div class="product-actions">
-                            <a href="/templates/finalizar_pedido.html" class="btn-comprar">Comprar</a>
+                            <a href="{{ url_for('finalizar_pedido') }}" class="btn-comprar">Comprar</a>
                         </div>
                     </div>
                 </div>
@@ -80,7 +82,7 @@
                 <!-- Produto 2 -->
                 <div class="product-card">
                     <div class="product-image">
-                        <img src="{{ url_for('static', filename='images/pulseira prata.jpg') }}" alt="">
+                        <img src="/images/pulseira prata.jpg" alt="">
                     </div>
                     <div class="product-info">
                         <h3>Pulseira</h3>
@@ -89,7 +91,7 @@
                         </div>
                         <p class="description">Pulseira de prata.</p>
                         <div class="product-actions">
-                            <a href="/templates/finalizar_pedido.html" class="btn-comprar">Comprar</a>
+                            <a href="{{ url_for('finalizar_pedido') }}" class="btn-comprar">Comprar</a>
                         </div>
                     </div>
                 </div>
@@ -97,7 +99,7 @@
                 <!-- Produto 3 -->
                 <div class="product-card">
                     <div class="product-image">
-                        <img src="{{ url_for('static', filename='images/colar.jpg') }}" alt="">
+                        <img src="/images/colar.jpg" alt="">
                         <div class="product-badge">Novo</div>
                     </div>
                     <div class="product-info">
@@ -107,7 +109,7 @@
                         </div>
                         <p class="description">Colar de prata com pingente em diamante.</p>
                         <div class="product-actions">
-                            <a href="/templates/finalizar_pedido.html" class="btn-comprar">Comprar</a>
+                            <a href="{{ url_for('finalizar_pedido') }}" class="btn-comprar">Comprar</a>
                         </div>
                     </div>
                 </div>

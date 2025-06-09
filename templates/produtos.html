@@ -11,15 +11,15 @@
     <header class="main-header">
         <div class="container">
             <div class="header-content">
-                <a href="/templates/sobre.html" class="logo">
+                <a href="" class="logo">
                     <img src="/images/logo mare de pratas sem nome.jpg" alt="Maré de Pratas">
                     <span>Maré de Pratas</span>
                 </a>
                 
                 <nav class="main-nav">
                     <ul>
-                        <li><a href="/templates/catalogo.html"><i class="fas fa-home"></i>Catalogo </a></li>
-                        <li><a href="/templates/sobre.html"><i class="fas fa-info-circle"></i> Sobre</a></li>
+                        <li><a href="{{ url_for('catalogo') }}"><i class="fas fa-home"></i>Catalogo </a></li>
+                        <li><a href="{{ url_for('sobre') }}"><i class="fas fa-info-circle"></i> Sobre</a></li>
                     </ul>
                 </nav>  
                 
@@ -61,7 +61,7 @@
                         <div class="price">R$ 129,90</div>
                         <div class="installment">ou 3x de R$ 43,30</div>
                         <div class="product-actions">
-                        <a href="/templates/finalizar_pedido.html" class="btn-comprar">Comprar</a>
+                        <a href="{{ url_for('finalizar_pedido') }}" class="btn-comprar">Comprar</a>
                         </div>
                     </div>
                 </div>
@@ -75,7 +75,7 @@
                         <div class="price">R$ 159,90</div>
                         <div class="installment">ou 4x de R$ 39,98</div>
                         <div class="product-actions">
-                        <a href="/templates/finalizar_pedido.html" class="btn-comprar">Comprar</a>
+                        <a href="{{ url_for('finalizar_pedido') }}" class="btn-comprar">Comprar</a>
                         </div>
                     </div>
                 </div>
@@ -90,7 +90,7 @@
                         <div class="price">R$ 99,90 <span class="old-price">R$ 124,90</span></div>
                         <div class="installment">ou 2x de R$ 49,95</div>
                         <div class="product-actions">
-                        <a href="/templates/finalizar_pedido.html" class="btn-comprar">Comprar</a>
+                        <a href="{{ url_for('finalizar_pedido') }}" class="btn-comprar">Comprar</a>
                         </div>
                     </div>
                 </div>
@@ -104,7 +104,7 @@
                         <div class="price">R$ 89,90</div>
                         <div class="installment">ou 2x de R$ 44,95</div>
                         <div class="product-actions">
-                        <a href="/templates/finalizar_pedido.html" class="btn-comprar">Comprar</a>
+                        <a href="{{ url_for('finalizar_pedido') }}" class="btn-comprar">Comprar</a>
                         </div>
                     </div>
                 </div>
@@ -118,7 +118,7 @@
                         <div class="price">R$ 229,90</div>
                         <div class="installment">ou 5x de R$ 45,98</div>
                         <div class="product-actions">
-                        <a href="/templates/finalizar_pedido.html" class="btn-comprar">Comprar</a>
+                        <a href="{{ url_for('finalizar_pedido') }}" class="btn-comprar">Comprar</a>
                         </div>
                     </div>
                 </div>
@@ -133,7 +133,7 @@
                         <div class="price">R$ 149,90</div>
                         <div class="installment">ou 3x de R$ 49,97</div>
                         <div class="product-actions">
-                        <a href="/templates/finalizar_pedido.html" class="btn-comprar">Comprar</a>
+                        <a href="{{ url_for('finalizar_pedido') }}" class="btn-comprar">Comprar</a>
                         </div>
                     </div>
                 </div>
