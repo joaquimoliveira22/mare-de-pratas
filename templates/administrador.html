@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>Painel do Administrador</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/administrador.css') }}">
+    <link rel="shortcut icon" type="imagex/png" href="/static/images/icone.ico">
 </head>
 <body>
 
@@ -14,7 +15,7 @@
         </a>
     </div>
 
-    <a href="{{ url_for('cadastrar_produto.html') }}">
+    <a href="{{ url_for('cadastrar_produto') }}">
         <button class="btn">+ Cadastrar Novo Produto</button>
     </a>
 
@@ -44,14 +45,15 @@
                     <td>{{ produto.estoque }}</td>
                     <td class="actions">
                         <a href="{{ url_for('editar_produto', id=produto.id) }}">
-                            <button class="btn">✏️ Editar</button>
+                            <button class="btn">Editar</button>
                         </a>
                         <a href="{{ url_for('remover_produto', id=produto.id) }}">
-                            <button class="btn btn-remover">🗑️ Remover</button>
+                            <button class="btn btn-remover">Remover</button>
                         </a>
                         <a href="{{ url_for('ajustar_estoque', id=produto.id) }}">
-                            <button class="btn btn-estoque">📦 Estoque</button>
+                        <button class="btn btn-estoque">Estoque</button>
                         </a>
+
                     </td>
                 </tr>
                 {% else %}

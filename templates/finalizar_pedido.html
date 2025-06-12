@@ -1,43 +1,30 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <title>Finalizar Pedido</title>
-    <link rel="stylesheet" href="/static/css/finalizar_pedido.css">
+   <meta charset="UTF-8">
+   <title>Finalizar Pedido</title>
+   <link rel="stylesheet" href="{{ url_for('static', filename='css/finalizar_pedido.css') }}">
+   <link rel="shortcut icon" type="imagex/png" href="/static/images/icone.ico">
 </head>
 <body>
-    <div class="container">
-        <h2>Finalizar Pedido</h2>
+   <div class="top-bar">
+       <img src="{{ url_for('static', filename='images/logo1.jpg') }}" alt="Logo" class="logo">
+       <a href="{{ url_for('catalogo') }}" class="btn-voltar">← Catálogo</a>
+   </div>
 
-        <a href="{{ url_for('catalogo') }}" style="display: inline-block; margin-bottom: 20px; text-decoration: none;">
-            <button type="button" class="btn-finalizar" style="background-color: #3a8af1; margin-bottom: 30px;">
-                 Voltar ao Catálogo
-            </button>
-        </a>
+   <h1>Finalizar Pedido</h1>
 
-        <form method="POST">
-            <label for="nome">Nome completo:</label>
-            <input type="text" id="nome" name="nome" required>
+   <div class="card-produto">
+       <img src="{{ produto.foto_url }}" alt="{{ produto.nome }}" width="200">
+       <h2>{{ produto.nome }}</h2>
+       <p>{{ produto.descricao }}</p>
+       <p><strong>R$ {{ '%.2f'|format(produto.valor) }}</strong></p>
 
-            <label for="email">E-mail:</label>
-            <input type="email" id="email" name="email" required>
-
-            <label for="telefone">Telefone:</label>
-            <input type="text" id="telefone" name="telefone" placeholder="(99) 99999-9999" required>
-
-            <label for="endereco">Endereço de entrega:</label>
-            <input type="text" id="endereco" name="endereco" required>
-
-            <label for="pagamento">Forma de pagamento:</label>
-            <select id="pagamento" name="pagamento" required>
-                <option value="">Selecione</option>
-                <option value="pix">Pix</option>
-                <option value="cartao">Cartão de Crédito</option>
-                <option value="boleto">Boleto</option>
-            </select>
-
-            <button type="submit" class="btn-finalizar">Confirmar Pedido</button>
-        </form>
-    </div>
+       <div class="btn-container">
+           <a href="{{ url_for('confirmar_pedido', produto_id=produto.id) }}" class="btn-confirmar">
+               Confirmar Pedido no WhatsApp
+           </a>
+       </div>
+   </div>
 </body>
 </html>

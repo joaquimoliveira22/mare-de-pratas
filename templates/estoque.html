@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Ajustar Estoque</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/estoque.css') }}">
+    <link rel="shortcut icon" type="imagex/png" href="/static/images/icone.ico">
+</head>
+<body>
+    <h1>Ajustar Estoque do Produto</h1>
+
+    <p>Produto: {{ produto.nome }}</p>
+    <p>Estoque atual: {{ produto.estoque }}</p>
+
+    <form method="POST">
+        <label for="estoque">Novo estoque:</label>
+        <input type="number" name="estoque" min="0" required>
+        <button type="submit">Atualizar</button>
+    </form>
+
+    <a href="{{ url_for('painel_admin') }}">Voltar</a>
+</body>
+</html>

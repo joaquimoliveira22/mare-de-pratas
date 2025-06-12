@@ -1,61 +1,91 @@
 body {
-    margin: 0;
+    background-color: #f4f4f4;
     font-family: Arial, sans-serif;
-    background-color: #ffffff;
     color: #333;
-}
-
-.container {
-    max-width: 600px;
-    margin: 50px auto;
-    background-color: #f8f8f8;
-    padding: 40px;
-    border-radius: 12px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-}
-
-h2 {
+    margin: 0;
+    padding: 20px;
     text-align: center;
-    color: #3a8af1;
-    font-size: 2rem;
-    margin-bottom: 30px;
+    position: relative;
 }
 
-form label {
-    display: block;
-    margin-bottom: 8px;
-    font-weight: bold;
-    color: #333;
-}
-
-form input[type="text"],
-form input[type="email"],
-form select {
-    width: 100%;
-    padding: 12px;
+.top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     margin-bottom: 20px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    box-sizing: border-box;
-    font-size: 1rem;
 }
 
-form select {
-    background-color: #fff;
+.logo {
+    height: 40px;
+    margin-left: 10px;
 }
 
-.btn-finalizar {
+.btn-voltar {
+    font-size: 14px;
+    text-decoration: none;
     background-color: #3a8af1;
     color: white;
-    border: none;
-    padding: 14px;
-    font-size: 1rem;
-    border-radius: 8px;
-    width: 100%;
-    cursor: pointer;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-weight: bold;
+    margin-right: 10px;
     transition: background-color 0.3s ease;
 }
 
-.btn-finalizar:hover {
-    background-color: #3275d0;
+.btn-voltar:hover {
+    background-color: #2f6fbe;
+}
+
+h1 {
+    color: #3a8af1;
+    margin-bottom: 30px;
+}
+
+.card-produto {
+    background-color: #3a8af1;
+    border-radius: 10px;
+    padding: 25px;
+    display: inline-block;
+    text-align: center;
+    max-width: 400px;
+    width: 100%;
+    margin-bottom: 30px;
+    color: #fff;
+}
+
+.card-produto img {
+    display: block;
+    margin: 0 auto 15px auto;
+    border-radius: 8px;
+}
+
+.card-produto h2 {
+    margin-top: 0;
+    color: #ffffff;
+}
+
+.card-produto p {
+    color: #ffffff;
+    margin-bottom: 10px;
+    font-size: 16px;
+}
+
+.btn-container {
+    margin-top: 20px;
+}
+
+.btn-confirmar {
+    text-decoration: none;
+    background-color: #ffffff;
+    color: #3a8af1;
+    padding: 12px 18px;
+    border-radius: 8px;
+    font-weight: bold;
+    display: inline-block;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.btn-confirmar:hover {
+    background-color: #e6e6e6;
+    color: #2f6fbe;
 }

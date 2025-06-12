@@ -6,14 +6,15 @@
     <title>Maré de Pratas - Catálogo</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/catalogo.css') }}">
+    <link rel="shortcut icon" type="imagex/png" href="/static/images/icone.ico">
 </head>
 <body>
     <header class="main-header">
         <div class="container">
             <div class="header-main">
                 <div class="logo-container">
-                    <a href="" class="logo">
-                        <img src="/images/logo mare de pratas sem nome.jpg" alt="">
+                    <a href="#" class="logo">
+                        <img src="{{ url_for('static', filename='images/logo1.jpg') }}" alt="">
                         <span>Maré de Pratas</span>
                     </a>
                 </div>
@@ -36,95 +37,51 @@
                 </button>
             </div>
 
-            <nav class="main-nav">
-                <a href="{{ url_for('produtos') }}"> 
-                <i class="fas fa-gem"> </i> Produtos</a> 
-
-                <a href="{{ url_for('sobre') }}">
-                <i class="fas fa-info-circle"> </i> Sobre</a>
-            </nav>
 
             <nav class="mobile-nav">
                 <ul>
                     <li><a href="#"><i class="fas fa-user"></i> {{ nome_usuario }}</a></li>
-                    <li><a href="/templates/registro.html"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
-                    <li><a href="/templates/login.html"><i class="fas fa-sign-in-alt"></i> Login</a></li>
+                    <li><a href="{{ url_for('registro') }}"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+                    <li><a href="{{ url_for('login') }}"><i class="fas fa-sign-in-alt"></i> Login</a></li>
                 </ul>
             </nav>
         </div>
     </header>
-
-    <main>
-        <div class="container">
-            <h2 class="catalog-title">Catálogo de Produtos</h2>
-
-            <div class="products-grid">
-
-                <div class="product-card">
-                    <div class="product-image">
-                        <img src="/images/anel.jpg" alt="">
-                        <div class="product-badge">Novo</div>
-                        <div class="product-badge">-20%</div>
-                    </div>
-                    <div class="product-info">
-                        <h3>Anel</h3>
-                        <div class="price-container">
-                            <p class="price">R$ 90</p>
-                            <span class="discount">R$ 120,00</span>
-                        </div>
-                        <p class="description">Anel de ouro, com detalhes em diamante revestidos de titânio.</p>
-                        <div class="product-actions">
-                            <a href="{{ url_for('finalizar_pedido') }}" class="btn-comprar">Comprar</a>
-                        </div>
-                    </div>
+<main>
+    <div class="container">
+        <h2 class="catalog-title">Catálogo de Produtos</h2>
+        
+        <div class="products-grid">
+            {% for produto in produtos %}
+            <div class="product-card">
+                <div class="product-image">
+                    <img src="{{ produto.foto_url }}" alt="{{ produto.nome }}">
                 </div>
-
-                <!-- Produto 2 -->
-                <div class="product-card">
-                    <div class="product-image">
-                        <img src="/images/pulseira prata.jpg" alt="">
+                <div class="product-info">
+                    <h3>{{ produto.nome }}</h3>
+                    <p class="description">{{ produto.descricao }}</p>
+                    <div class="price-container">
+                        <span class="price">R$ {{ '%.2f'|format(produto.valor) }}</span>
                     </div>
-                    <div class="product-info">
-                        <h3>Pulseira</h3>
-                        <div class="price-container">
-                            <p class="price">R$ 45</p>
-                        </div>
-                        <p class="description">Pulseira de prata.</p>
-                        <div class="product-actions">
-                            <a href="{{ url_for('finalizar_pedido') }}" class="btn-comprar">Comprar</a>
-                        </div>
-                    </div>
+                    <form action="{{ url_for('finalizar_pedido') }}" method="POST">
+                        <input type="hidden" name="produto_id" value="{{ produto.id }}">
+                        <button type="submit" class="btn-comprar">Comprar</button>
+                    </form>
                 </div>
-
-                <!-- Produto 3 -->
-                <div class="product-card">
-                    <div class="product-image">
-                        <img src="/images/colar.jpg" alt="">
-                        <div class="product-badge">Novo</div>
-                    </div>
-                    <div class="product-info">
-                        <h3>Colar</h3>
-                        <div class="price-container">
-                            <p class="price">R$ 250</p>
-                        </div>
-                        <p class="description">Colar de prata com pingente em diamante.</p>
-                        <div class="product-actions">
-                            <a href="{{ url_for('finalizar_pedido') }}" class="btn-comprar">Comprar</a>
-                        </div>
-                    </div>
-                </div>
-
             </div>
+            {% endfor %}
         </div>
-    </main>
+    </div>
+</main>
 
-    <!-- Rodapé -->
+
     <footer class="main-footer">
         <div class="container">
             <div class="footer-container">
                 <div class="footer-info">
                     <p><i class="fas fa-gem"></i> Joias em prata 950</p>
                     <p><i class="fas fa-phone"></i> (85) 98224-6332</p>
+                    <p>Sobre: loja de joias de prata fundada em 2022. </p>
                 </div>
                 <div class="social-icons">
                     <a href="https://www.instagram.com/mare_depratas?igsh=bDBsbXhwY3N5NmQ2"><i class="fab fa-instagram"></i></a>
@@ -134,7 +91,6 @@
         </div>
     </footer>
 
-    <!-- JS: menu e hover -->
     <script>
         document.querySelector('.menu-toggle').addEventListener('click', function () {
             document.querySelector('.mobile-nav').classList.toggle('active');
