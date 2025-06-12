@@ -1,0 +1,89 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    color: white;
+    padding: 20px;
+}
+
+h1 {
+    color: #3a8af1;
+    text-align: center;
+}
+
+.btn {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 6px;
+    background-color: #3a8af1;
+    color: white;
+    cursor: pointer;
+    margin-bottom: 15px;
+    font-weight: bold;
+}
+
+.btn:hover {
+    background-color: #3275d0;
+}
+
+.logout {
+    background-color: #f44336;
+}
+
+.logout:hover {
+    background-color: #c0392b;
+}
+
+.btn-remover {
+    background-color: #e74c3c;
+}
+
+.btn-remover:hover {
+    background-color: #c0392b;
+}
+
+.btn-estoque {
+    background-color: #27ae60;
+}
+
+.btn-estoque:hover {
+    background-color: #1e874b;
+}
+
+.top-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.table-container {
+    margin-top: 20px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #3a8af1;
+    color: white;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+th, td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid white;
+}
+
+th {
+    background-color: #3275d0;
+}
+
+img {
+    max-width: 100px;
+    border-radius: 6px;
+}
+
+.actions button {
+    margin-right: 5px;
+}

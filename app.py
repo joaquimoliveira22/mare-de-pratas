@@ -49,8 +49,14 @@ def login():
     if request.method == 'POST':
         email = request.form['email']
         senha = request.form['senha']
-        usuario = Usuario.query.filter_by(email=email).first()
 
+        # Verificação para acesso do administrador fixo
+        if email == 'adm123@gmail.com' and senha == 'adm2323':
+            session['nome_usuario'] = 'Administrador'
+            return redirect(url_for('painel_admin'))
+
+        # Verificação para usuários comuns
+        usuario = Usuario.query.filter_by(email=email).first()
         if usuario and check_password_hash(usuario.senha, senha):
             session['nome_usuario'] = usuario.nome_completo
             return redirect(url_for('catalogo'))
@@ -83,11 +89,37 @@ def sobre():
     nome_usuario = session.get('nome_usuario')
     return render_template('sobre.html', nome_usuario=nome_usuario)
 
-@app.route('/finalizar_pedido')
+# Página Finalizar Pedido
+@app.route('/finalizar_pedido', methods=['GET', 'POST'])
 def finalizar_pedido():
     nome_usuario = session.get('nome_usuario')
-    return render_template('finalizar_pedido.html', nome_usuario=nome_usuario)
+    if request.method == 'POST':
+        produto = request.form.get('produto')
+    else:
+        produto = None
+    return render_template('finalizar_pedido.html', nome_usuario=nome_usuario, produto=produto)
 
+# Página de Confirmação de Pedido
+@app.route('/confirmar_pedido', methods=['POST'])
+def confirmar_pedido():
+    produto = request.form['produto']
+    pagamento = request.form['pagamento']
+    nome = request.form['nome']
+    email = request.form['email']
+    telefone = request.form['telefone']
+    endereco = request.form['endereco']
+
+    flash(f'Pedido do produto "{produto}" confirmado com pagamento via {pagamento}.', 'success')
+    return redirect(url_for('catalogo'))
+
+# Painel do Administrador (renderiza administrador.html)
+@app.route('/painel_admin')
+def painel_admin():
+    nome_usuario = session.get('nome_usuario')
+    if nome_usuario != 'Administrador':
+        flash('Acesso negado.', 'error')
+        return redirect(url_for('login'))
+    return render_template('administrador.html', nome_usuario=nome_usuario)
 
 if __name__ == '__main__':
     with app.app_context():
