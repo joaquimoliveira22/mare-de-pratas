@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Meus Favoritos - Maré de Pratas</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/favoritos.css') }}">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='images/icone.ico') }}" type="image/x-icon">
+</head>
+<body>
+    <header class="main-header">
+        <div class="container">
+            <div class="logo">
+                <a href="{{ url_for('catalogo') }}">
+                    <i class="fa-solid fa-gem"></i> Maré de Pratas
+                </a>
+            </div>
+            <div class="actions">
+                <a href="{{ url_for('favoritos') }}" title="Favoritos"><i class="fa-solid fa-heart"></i></a>
+                <a href="{{ url_for('ver_carrinho') }}" title="Carrinho"><i class="fa-solid fa-cart-shopping"></i></a>
+                {% if nome_usuario %}
+                    <span><i class="fa-solid fa-user"></i> {{ nome_usuario }}</span>
+                    <a href="{{ url_for('logout') }}" title="Logout"><i class="fa-solid fa-right-from-bracket"></i></a>
+                {% else %}
+                    <a href="{{ url_for('login') }}" title="Login"><i class="fa-solid fa-right-to-bracket"></i></a>
+                {% endif %}
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <h2 class="catalog-title">Meus Favoritos</h2>
+        <div class="voltar-catalogo">
+            <a href="{{ url_for('catalogo') }}" class="btn-voltar">
+                <i class="fa-solid fa-arrow-left"></i> Voltar ao Catálogo
+            </a>
+        </div>
+
+        {% if produtos %}
+        <div class="products-grid">
+            {% for produto in produtos %}
+            <div class="product-card">
+                <form action="{{ url_for('adicionar_favorito') }}" method="POST" class="form-favorito">
+                    <input type="hidden" name="produto_id" value="{{ produto.id }}">
+                    <button type="submit" class="btn-favorito" title="Remover dos favoritos">
+                        <i class="fa-solid fa-heart"></i>
+                    </button>
+                </form>
+
+                <div class="product-image">
+                    <img src="{{ produto.foto_url }}" alt="Imagem de {{ produto.nome }}">
+                </div>
+
+                <div class="product-info">
+                    <h3>{{ produto.nome }}</h3>
+                    <p class="description">{{ produto.descricao }}</p>
+                    <div class="price-container">R$ {{ '%.2f'|format(produto.valor) }}</div>
+
+                    <div class="product-buttons">
+                        <form action="{{ url_for('adicionar_ao_carrinho') }}" method="POST">
+                            <input type="hidden" name="produto_id" value="{{ produto.id }}">
+                            <button type="submit" class="btn-carrinho">
+                                <i class="fa-solid fa-cart-plus"></i> Carrinho
+                            </button>
+                        </form>
+
+                        {% set mensagem = "Olá! Gostaria de comprar o produto: " + produto.nome + " por R$ " + "%.2f"|format(produto.valor) %}
+                        <a href="https://api.whatsapp.com/send?phone=5585982246332&text={{ mensagem | urlencode }}"
+                           target="_blank"
+                           class="btn-comprar">
+                           <i class="fab fa-whatsapp"></i> Comprar
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <p class="mensagem-vazia">Você ainda não adicionou produtos aos favoritos.</p>
+        {% endif %}
+    </main>
+
+    <footer class="main-footer">
+        <p><i class="fa-solid fa-gem"></i> Joias em prata 950 | (85) 98224-6332</p>
+        <div class="social-icons">
+            <a href="https://www.instagram.com/mare_depratas" target="_blank"><i class="fab fa-instagram"></i></a>
+            <a href="https://api.whatsapp.com/send/?phone=5585982246332" target="_blank"><i class="fab fa-whatsapp"></i></a>
+        </div>
+    </footer>
+</body>
+</html>

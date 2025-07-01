@@ -504,7 +504,21 @@ main {
     font-weight: bold;
     transition: background-color 0.3s ease;
 }
-
+.btn-favorito {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #888;
+    font-size: 1.2em;
+    margin-bottom: 0.5rem;
+}
+.btn-favorito .ativo {
+    color: red;
+}
+.form-favorito {
+    text-align: right;
+}
+    
 .btn-comprar:hover {
     background-color: #2f6fbe;
 }

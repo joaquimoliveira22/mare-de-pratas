@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for, session, f
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
+from urllib.parse import quote_plus
 import os
 
 app = Flask(__name__)
@@ -14,6 +15,12 @@ ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 db = SQLAlchemy(app)
+
+class Favorito(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    usuario_id = db.Column(db.Integer, nullable=False)
+    produto_id = db.Column(db.Integer, nullable=False)
+
 
 class Usuario(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -77,7 +84,15 @@ def catalogo():
     produtos = Produto.query.all()
     carrinho = session.get('carrinho', {})
     carrinho_qtd = sum(carrinho.values())
-    return render_template('catalogo.html', nome_usuario=nome_usuario, produtos=produtos, carrinho_qtd=carrinho_qtd)
+    favoritos_ids = []
+
+    if nome_usuario:
+        usuario = Usuario.query.filter_by(nome_completo=nome_usuario).first()
+        if usuario:
+            favoritos_ids = [f.produto_id for f in Favorito.query.filter_by(usuario_id=usuario.id).all()]
+
+    return render_template('catalogo.html', nome_usuario=nome_usuario,
+                           produtos=produtos, carrinho_qtd=carrinho_qtd, favoritos_ids=favoritos_ids)
 
 @app.route('/registro', methods=['GET', 'POST'])
 def registro():
@@ -144,13 +159,32 @@ def painel_admin():
     produtos = Produto.query.all()
     return render_template('administrador.html', nome_usuario='Administrador', produtos=produtos)
 
+
 @app.route('/produtos')
 def listar_produtos():
-    produtos = Produto.query.all()
+    termo_busca = request.args.get('q', '').strip().lower()
     carrinho = session.get('carrinho', {})
     carrinho_qtd = sum(carrinho.values())
-    # Troque 'usuario' por 'nome_usuario' para manter consistência
-    return render_template('catalogo.html', produtos=produtos, nome_usuario=session.get('nome_usuario', 'Visitante'), carrinho_qtd=carrinho_qtd)
+    favoritos_ids = []
+
+    nome_usuario = session.get('nome_usuario')
+    if nome_usuario:
+        usuario = Usuario.query.filter_by(nome_completo=nome_usuario).first()
+        if usuario:
+            favoritos_ids = [f.produto_id for f in Favorito.query.filter_by(usuario_id=usuario.id).all()]
+
+    if termo_busca:
+        produtos = Produto.query.filter(Produto.nome.ilike(f'%{termo_busca}%')).all()
+    else:
+        produtos = Produto.query.all()
+
+    return render_template(
+        'catalogo.html',
+        produtos=produtos,
+        nome_usuario=nome_usuario,
+        carrinho_qtd=carrinho_qtd,
+        favoritos_ids=favoritos_ids
+    )
 
 
 @app.route('/finalizar_pedido', methods=['GET', 'POST'])
@@ -159,12 +193,16 @@ def finalizar_pedido():
     if not nome_usuario:
         flash('Você precisa estar logado para finalizar a compra.', 'error')
         return redirect(url_for('login'))
+
     carrinho = session.get('carrinho', {})
     if not carrinho:
         flash('Seu carrinho está vazio.', 'error')
         return redirect(url_for('catalogo'))
+
     itens = []
     valor_total = 0
+    mensagem_itens = []
+
     for produto_id_str, quantidade in carrinho.items():
         produto = Produto.query.get(int(produto_id_str))
         if produto:
@@ -178,7 +216,22 @@ def finalizar_pedido():
                 'subtotal': subtotal,
                 'foto_url': produto.foto_url
             })
-    return render_template('finalizar_pedido.html', nome_usuario=nome_usuario, carrinho=itens, total=valor_total)
+            mensagem_itens.append(f"{quantidade}x {produto.nome} (R$ {produto.valor:.2f} cada) - Subtotal: R$ {subtotal:.2f}")
+
+    mensagem_total = f"Total da compra: R$ {valor_total:.2f}"
+    mensagem_completa = "Olá, gostaria de fazer o pedido:\n" + "\n".join(mensagem_itens) + "\n" + mensagem_total
+
+    mensagem_url = quote_plus(mensagem_completa)
+    numero_whatsapp = '5585982246332'
+    link_whatsapp = f"https://api.whatsapp.com/send?phone={numero_whatsapp}&text={mensagem_url}"
+
+    return render_template(
+        'finalizar_pedido.html',
+        nome_usuario=nome_usuario,
+        carrinho=itens,
+        total=valor_total,
+        link_whatsapp=link_whatsapp
+    )
 
 @app.route('/editar_produto/<int:id>', methods=['GET', 'POST'])
 def editar_produto(id):
@@ -238,6 +291,42 @@ def confirmar_pedido(produto_id):
     numero_whatsapp = '5585982246332'
     link = f"https://api.whatsapp.com/send?phone={numero_whatsapp}&text={mensagem}"
     return redirect(link)
+
+@app.route('/favoritos')
+def favoritos():
+    if 'nome_usuario' not in session:
+        flash('Você precisa estar logado para ver seus favoritos.', 'error')
+        return redirect(url_for('login'))
+
+    usuario = Usuario.query.filter_by(nome_completo=session['nome_usuario']).first()
+    favoritos = Favorito.query.filter_by(usuario_id=usuario.id).all()
+    produtos_ids = [f.produto_id for f in favoritos]
+    produtos = Produto.query.filter(Produto.id.in_(produtos_ids)).all()
+    
+    return render_template('favoritos.html', nome_usuario=session['nome_usuario'], produtos=produtos)
+
+
+@app.route('/adicionar_favorito', methods=['POST'])
+def adicionar_favorito():
+    if 'nome_usuario' not in session:
+        flash('Você precisa estar logado para favoritar um produto.', 'error')
+        return redirect(url_for('login'))
+
+    produto_id = int(request.form['produto_id'])
+    usuario = Usuario.query.filter_by(nome_completo=session['nome_usuario']).first()
+
+    favorito = Favorito.query.filter_by(usuario_id=usuario.id, produto_id=produto_id).first()
+    if favorito:
+        db.session.delete(favorito)
+        flash('Produto removido dos favoritos.', 'success')
+    else:
+        novo_favorito = Favorito(usuario_id=usuario.id, produto_id=produto_id)
+        db.session.add(novo_favorito)
+        flash('Produto adicionado aos favoritos!', 'success')
+
+    db.session.commit()
+    return redirect(request.referrer or url_for('catalogo'))
+
 
 if __name__ == '__main__':
     os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)

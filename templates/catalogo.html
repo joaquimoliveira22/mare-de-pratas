@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Maré de Pratas - Catálogo</title>
+    <title>Meus Favoritos - Maré de Pratas</title>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/catalogo.css') }}">
@@ -11,61 +11,67 @@
 </head>
 <body>
     <header class="main-header">
-        <div class="container">
-            <div class="header-main">
-                <div class="logo-container">
-                    <a href="#" class="logo">
-                        <img src="{{ url_for('static', filename='images/logo1.jpg') }}" alt="Logo Maré de Pratas">
-                        <span>Maré de Pratas</span>
-                    </a>
-                </div>
-
-                <div class="user-actions">
-                    <a href="{{ url_for('ver_carrinho') }}" title="Carrinho">
-                        <i class="fa-solid fa-cart-shopping"></i>
-                        {% if carrinho_qtd > 0 %}
-                        <span class="cart-badge">{{ carrinho_qtd }}</span>
-                        {% endif %}
-                    </a>
-
-                    {% if nome_usuario %}
-                        <span class="user-name"><i class="fa-solid fa-user"></i> {{ nome_usuario }}</span>
-                        <a href="{{ url_for('registro') }}" title="Logout"><i class="fa-solid fa-right-from-bracket"></i></a>
-                    {% else %}
-                        <a href="{{ url_for('login') }}" title="Login"><i class="fa-solid fa-right-to-bracket"></i></a>
-                    {% endif %}
-                </div>
-
-                <div class="search-container">
-                    <form action="{{ url_for('listar_produtos') }}" method="GET">
-                        <input type="text" placeholder="Buscar produtos..." name="q">
-                        <button type="submit"><i class="fa-solid fa-search"></i></button>
-                    </form>
-                </div>
-
-                <button class="menu-toggle" aria-label="Abrir menu">
-                    <i class="fa-solid fa-bars"></i>
-                </button>
+    <div class="container">
+        <div class="header-main">
+            <div class="logo-container">
+                <a href="{{ url_for('listar_produtos') }}" class="logo">
+                    <img src="{{ url_for('static', filename='images/logo1.jpg') }}" alt="Logo Maré de Pratas">
+                    <span>Maré de Pratas</span>
+                </a>
             </div>
 
-            <nav class="mobile-nav">
-                <ul>
-                    {% if nome_usuario %}
-                        <li><a href="#"><i class="fa-solid fa-user"></i> {{ nome_usuario }}</a></li>
-                        <li><a href="{{ url_for('registro') }}"><i class="fa-solid fa-right-from-bracket"></i> Logout</a></li>
-                    {% else %}
-                        <li><a href="{{ url_for('login') }}"><i class="fa-solid fa-right-to-bracket"></i> Login</a></li>
-                    {% endif %}
-                    <li><a href="{{ url_for('ver_carrinho') }}"><i class="fa-solid fa-cart-shopping"></i> Carrinho</a></li>
-                </ul>
-            </nav>
-        </div>
-    </header>
+            <!-- Barra de pesquisa centralizada -->
+            <div class="search-container">
+                <form action="{{ url_for('listar_produtos') }}" method="GET">
+                    <input type="text" placeholder="Buscar produtos..." name="q">
+                    <button type="submit">
+                        <i class="fa-solid fa-search"></i>
+                    </button>
+                </form>
+            </div>
 
+            <div class="user-actions">
+                <a href="{{ url_for('favoritos') }}" title="Favoritos">
+                    <i class="fa-solid fa-heart"></i>
+                </a>
+                <a href="{{ url_for('ver_carrinho') }}" title="Carrinho">
+                    <i class="fa-solid fa-cart-shopping"></i>
+                    {% if carrinho_qtd > 0 %}
+                        <span class="cart-badge">{{ carrinho_qtd }}</span>
+                    {% endif %}
+                </a>
+
+                {% if nome_usuario %}
+                    <span class="user-name"><i class="fa-solid fa-user"></i> {{ nome_usuario }}</span>
+                    <a href="{{ url_for('registro') }}" title="Logout"><i class="fa-solid fa-right-from-bracket"></i></a>
+                {% else %}
+                    <a href="{{ url_for('login') }}" title="Login"><i class="fa-solid fa-right-to-bracket"></i></a>
+                {% endif %}
+            </div>
+
+            <button class="menu-toggle" aria-label="Abrir menu">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+        </div>
+
+        <nav class="mobile-nav">
+            <ul>
+                {% if nome_usuario %}
+                    <li><a href="#"><i class="fa-solid fa-user"></i> {{ nome_usuario }}</a></li>
+                    <li><a href="{{ url_for('registro') }}"><i class="fa-solid fa-right-from-bracket"></i> Logout</a></li>
+                {% else %}
+                    <li><a href="{{ url_for('login') }}"><i class="fa-solid fa-right-to-bracket"></i> Login</a></li>
+                {% endif %}
+                <li><a href="{{ url_for('ver_carrinho') }}"><i class="fa-solid fa-cart-shopping"></i> Carrinho</a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
     <main>
         <div class="container">
-            <h2 class="catalog-title">Catálogo de Produtos</h2>
+            <h2 class="catalog-title">Catalogo</h2>
 
+            {% if produtos %}
             <div class="products-grid">
                 {% for produto in produtos %}
                 <div class="product-card">
@@ -73,6 +79,13 @@
                         <img src="{{ produto.foto_url }}" alt="Imagem de {{ produto.nome }}">
                     </div>
                     <div class="product-info">
+                        <form action="{{ url_for('adicionar_favorito') }}" method="POST" class="form-favorito">
+                            <input type="hidden" name="produto_id" value="{{ produto.id }}">
+                            <button type="submit" class="btn-favorito" title="Remover dos favoritos">
+                                <i class="fa-solid fa-heart ativo"></i>
+                            </button>
+                        </form>
+
                         <h3>{{ produto.nome }}</h3>
                         <p class="description">{{ produto.descricao }}</p>
                         <div class="price-container">
@@ -97,6 +110,9 @@
                 </div>
                 {% endfor %}
             </div>
+            {% else %}
+            <p style="text-align: center; padding: 2rem;">Você ainda não adicionou produtos aos favoritos.</p>
+            {% endif %}
         </div>
     </main>
 
