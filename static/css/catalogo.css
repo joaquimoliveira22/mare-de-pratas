@@ -503,18 +503,24 @@ main {
     cursor: pointer;
     font-weight: bold;
     transition: background-color 0.3s ease;
-}
+ }   
 .btn-favorito {
     background: none;
     border: none;
     cursor: pointer;
-    color: #888;
-    font-size: 1.2em;
-    margin-bottom: 0.5rem;
 }
-.btn-favorito .ativo {
+
+.btn-favorito i {
+    color: #aaa;
+    font-size: 1.3rem;
+    transition: color 0.3s;
+}
+
+.btn-favorito i.ativo {
     color: red;
 }
+
+
 .form-favorito {
     text-align: right;
 }
@@ -595,4 +601,25 @@ main {
 
 .btn-comprar:hover {
     background-color: #3a8af1;
+}
+button.disabled {
+    background-color: #ccc;
+    color: #666;
+    cursor: not-allowed;
+    border: none;
+}
+.original-price {
+    text-decoration: line-through;
+    color: #999;
+    margin-right: 0.5rem;
+}
+
+.discounted-price {
+    color: red;
+    font-weight: bold;
+}
+
+.discount-percent {
+    font-size: 0.9rem;
+    color: green;
 }

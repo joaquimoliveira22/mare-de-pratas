@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, session, flash
+from flask import Flask, render_template, request, redirect, url_for, session, flash, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
@@ -36,6 +36,10 @@ class Produto(db.Model):
     valor = db.Column(db.Float, nullable=False)
     foto_url = db.Column(db.String(200), nullable=False)
     estoque = db.Column(db.Integer, nullable=False, default=0)
+    tamanho = db.Column(db.String(50), nullable=True)
+    espessura = db.Column(db.String(50), nullable=True)
+    desconto = db.Column(db.Integer, nullable=True, default=0)
+
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
@@ -43,10 +47,19 @@ def allowed_file(filename):
 @app.route('/adicionar_ao_carrinho', methods=['POST'])
 def adicionar_ao_carrinho():
     produto_id = int(request.form['produto_id'])
+    produto = Produto.query.get_or_404(produto_id)
+
+    if produto.estoque <= 0:
+        flash(f"O produto '{produto.nome}' está sem estoque no momento.", 'error')
+        return redirect(url_for('listar_produtos'))
+
     carrinho = session.get('carrinho', {})
-    carrinho[str(produto_id)] = carrinho.get(str(produto_id), 0) + 1
+    produto_id_str = str(produto_id)
+    carrinho[produto_id_str] = carrinho.get(produto_id_str, 0) + 1
     session['carrinho'] = carrinho
-    flash('Produto adicionado ao carrinho!')
+    session.modified = True
+
+    flash('Produto adicionado ao carrinho!', 'success')
     return redirect(url_for('listar_produtos'))
 
 @app.route('/carrinho')
@@ -58,16 +71,20 @@ def ver_carrinho():
     for produto_id_str, quantidade in carrinho.items():
         produto = Produto.query.get(int(produto_id_str))
         if produto:
-            subtotal = produto.valor * quantidade
+            preco_unitario = produto.valor * (1 - (produto.desconto or 0) / 100)
+            subtotal = preco_unitario * quantidade
             valor_total += subtotal
             itens.append({
                 'id': produto.id,
                 'nome': produto.nome,
                 'valor': produto.valor,
+                'desconto': produto.desconto,
+                'valor_com_desconto': preco_unitario,
                 'quantidade': quantidade,
                 'subtotal': subtotal,
                 'foto_url': produto.foto_url
             })
+
     return render_template('carrinho.html', carrinho=itens, total=valor_total)
 
 @app.route('/remover_do_carrinho/<int:produto_id>', methods=['POST'])
@@ -138,12 +155,17 @@ def cadastrar_produto():
         descricao = request.form['descricao']
         valor = float(request.form['valor'])
         foto = request.files['foto']
+        tamanho = request.form['tamanho']
+        espessura = request.form['espessura']
+       
+
         if foto and allowed_file(foto.filename):
             filename = secure_filename(foto.filename)
             foto_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
             foto.save(foto_path)
             foto_url = f'/static/uploads/{filename}'
-            novo_produto = Produto(nome=nome, descricao=descricao, valor=valor, foto_url=foto_url)
+           
+            novo_produto = Produto(nome=nome, descricao=descricao, valor=valor, foto_url=foto_url, tamanho=tamanho, espessura=espessura)
             db.session.add(novo_produto)
             db.session.commit()
             flash('Produto cadastrado com sucesso!', 'success')
@@ -158,6 +180,26 @@ def painel_admin():
         return redirect(url_for('login'))
     produtos = Produto.query.all()
     return render_template('administrador.html', nome_usuario='Administrador', produtos=produtos)
+
+@app.route('/editar_desconto/<int:id>', methods=['GET', 'POST'])
+def editar_desconto(id):
+    produto = Produto.query.get_or_404(id)
+
+    if request.method == 'POST':
+        try:
+            desconto = int(request.form.get('desconto'))
+            if 0 <= desconto <= 100:
+                produto.desconto = desconto
+                db.session.commit()
+                flash('Desconto atualizado com sucesso!', 'success')
+            else:
+                flash('O desconto deve estar entre 0% e 100%.', 'error')
+        except ValueError:
+            flash('Valor inválido para desconto.', 'error')
+
+        return redirect(url_for('painel_admin'))
+
+    return render_template('editar_desconto.html', produto=produto)
 
 
 @app.route('/produtos')
@@ -205,18 +247,34 @@ def finalizar_pedido():
 
     for produto_id_str, quantidade in carrinho.items():
         produto = Produto.query.get(int(produto_id_str))
-        if produto:
-            subtotal = produto.valor * quantidade
-            valor_total += subtotal
-            itens.append({
-                'id': produto.id,
-                'nome': produto.nome,
-                'valor': produto.valor,
-                'quantidade': quantidade,
-                'subtotal': subtotal,
-                'foto_url': produto.foto_url
-            })
-            mensagem_itens.append(f"{quantidade}x {produto.nome} (R$ {produto.valor:.2f} cada) - Subtotal: R$ {subtotal:.2f}")
+    if produto:
+        if produto.estoque < quantidade:
+            flash(f'Estoque insuficiente para o produto: {produto.nome}', 'error')
+            return redirect(url_for('ver_carrinho'))
+
+        produto.estoque -= quantidade  # Subtrai do estoque
+        db.session.commit()  # Salva no banco
+
+        preco_unitario = produto.valor * (1 - (produto.desconto or 0) / 100)
+        subtotal = preco_unitario * quantidade
+        valor_total += subtotal
+        itens.append({
+            'id': produto.id,
+            'nome': produto.nome,
+            'valor': produto.valor,
+            'quantidade': quantidade,
+            'subtotal': subtotal,
+            'foto_url': produto.foto_url
+        })
+
+        if produto.desconto:
+            mensagem_itens.append(
+                f"{quantidade}x {produto.nome} (de R$ {produto.valor:.2f} por R$ {preco_unitario:.2f}) - Subtotal: R$ {subtotal:.2f}"
+            )
+        else:
+            mensagem_itens.append(
+                f"{quantidade}x {produto.nome} (R$ {produto.valor:.2f} cada) - Subtotal: R$ {subtotal:.2f}"
+            )
 
     mensagem_total = f"Total da compra: R$ {valor_total:.2f}"
     mensagem_completa = "Olá, gostaria de fazer o pedido:\n" + "\n".join(mensagem_itens) + "\n" + mensagem_total
@@ -225,7 +283,10 @@ def finalizar_pedido():
     numero_whatsapp = '5585982246332'
     link_whatsapp = f"https://api.whatsapp.com/send?phone={numero_whatsapp}&text={mensagem_url}"
 
-    return render_template(
+    session.pop('carrinho', None)
+    
+
+    return render_template( 
         'finalizar_pedido.html',
         nome_usuario=nome_usuario,
         carrinho=itens,
@@ -240,6 +301,9 @@ def editar_produto(id):
         produto.nome = request.form['nome']
         produto.descricao = request.form['descricao']
         produto.valor = float(request.form['valor'])
+        produto.tamanho = request.form['tamanho']
+        produto.espessura = request.form['espessura']
+
         foto = request.files.get('foto')
         if foto and allowed_file(foto.filename):
             filename = secure_filename(foto.filename)
@@ -292,6 +356,28 @@ def confirmar_pedido(produto_id):
     link = f"https://api.whatsapp.com/send?phone={numero_whatsapp}&text={mensagem}"
     return redirect(link)
 
+
+@app.route('/toggle_favorito', methods=['POST'])
+def toggle_favorito():
+    if 'nome_usuario' not in session:
+        return jsonify({'success': False, 'message': 'Login necessário'}), 401
+
+    data = request.get_json()
+    produto_id = int(data.get('produto_id'))
+
+    usuario = Usuario.query.filter_by(nome_completo=session['nome_usuario']).first()
+    favorito = Favorito.query.filter_by(usuario_id=usuario.id, produto_id=produto_id).first()
+
+    if favorito:
+        db.session.delete(favorito)
+        db.session.commit()
+        return jsonify({'success': True, 'favoritado': False})
+    else:
+        novo_favorito = Favorito(usuario_id=usuario.id, produto_id=produto_id)
+        db.session.add(novo_favorito)
+        db.session.commit()
+        return jsonify({'success': True, 'favoritado': True})
+    
 @app.route('/favoritos')
 def favoritos():
     if 'nome_usuario' not in session:

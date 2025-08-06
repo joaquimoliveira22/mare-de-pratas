@@ -27,19 +27,32 @@
           <th>Subtotal</th>
         </tr>
       </thead>
-      <tbody>
-        {% for item in carrinho %}
-        <tr>
-          <td class="produto-info">
-            <img src="{{ item.foto_url }}" alt="{{ item.nome }}">
-            <span>{{ item.nome }}</span>
-          </td>
-          <td>{{ item.quantidade }}</td>
-          <td>R$ {{ '%.2f'|format(item.valor) }}</td>
-          <td>R$ {{ '%.2f'|format(item.subtotal) }}</td>
-        </tr>
-        {% endfor %}
-      </tbody>
+     <tbody>
+      {% for item in carrinho %}
+      <tr>
+        <td class="produto-info">
+          <img src="{{ item.foto_url }}" alt="{{ item.nome }}">
+          <span>{{ item.nome }}</span>
+        </td>
+        <td>{{ item.quantidade }}</td>
+        <td>
+          {% if item.desconto %}
+            <span style="text-decoration: line-through; color: #999;">
+              R$ {{ '%.2f'|format(item.valor) }}
+            </span><br>
+            <span style="color: red; font-weight: bold;">
+              R$ {{ '%.2f'|format(item.valor_com_desconto) }}
+            </span><br>
+            <span style="color: green;">(-{{ item.desconto }}%)</span>
+          {% else %}
+            R$ {{ '%.2f'|format(item.valor) }}
+          {% endif %}
+        </td>
+        <td>R$ {{ '%.2f'|format(item.subtotal) }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+
     </table>
 
     <div class="resumo">

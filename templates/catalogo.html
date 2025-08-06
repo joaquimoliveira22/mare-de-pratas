@@ -79,25 +79,45 @@
                         <img src="{{ produto.foto_url }}" alt="Imagem de {{ produto.nome }}">
                     </div>
                     <div class="product-info">
-                        <form action="{{ url_for('adicionar_favorito') }}" method="POST" class="form-favorito">
-                            <input type="hidden" name="produto_id" value="{{ produto.id }}">
-                            <button type="submit" class="btn-favorito" title="Remover dos favoritos">
-                                <i class="fa-solid fa-heart ativo"></i>
-                            </button>
-                        </form>
+                        <p><strong>Tamanho:</strong> {{ produto.tamanho }}</p>
+                        <p><strong>Espessura:</strong> {{ produto.espessura }}</p>
+
+                        <button class="btn-favorito" data-produto-id="{{ produto.id }}" title="Favoritar">
+                            <i class="fa-solid fa-heart {% if produto.id in favoritos_ids %}ativo{% endif %}"></i>
+                        </button>
+
+
 
                         <h3>{{ produto.nome }}</h3>
                         <p class="description">{{ produto.descricao }}</p>
                         <div class="price-container">
-                            <span class="price">R$ {{ '%.2f'|format(produto.valor) }}</span>
+                            {% if produto.desconto %}
+                                <span class="original-price" style="text-decoration: line-through; color: #999;">
+                                    R$ {{ '%.2f'|format(produto.valor) }}
+                                </span>
+                                <span class="discounted-price">
+                                    R$ {{ '%.2f'|format(produto.valor * (1 - produto.desconto / 100)) }}
+                                </span>
+                                <span class="discount-percent">(-{{ produto.desconto }}%)</span>
+                            {% else %}
+                                <span class="price">R$ {{ '%.2f'|format(produto.valor) }}</span>
+                            {% endif %}
                         </div>
+
                         <div class="product-buttons">
+                            {% if produto.estoque > 0 %}
                             <form action="{{ url_for('adicionar_ao_carrinho') }}" method="POST">
                                 <input type="hidden" name="produto_id" value="{{ produto.id }}">
                                 <button type="submit" class="btn-carrinho">
                                     <i class="fa-solid fa-cart-plus"></i> Carrinho
                                 </button>
                             </form>
+                        {% else %}
+                            <button class="btn-carrinho disabled" disabled style="background-color: #ccc; cursor: not-allowed;">
+                                <i class="fa-solid fa-ban"></i> Sem estoque
+                            </button>
+                        {% endif %}
+
 
                             {% set mensagem = "Olá! Gostaria de comprar o produto: " + produto.nome + " por R$ " + "%.2f"|format(produto.valor) %}
                             <a href="https://api.whatsapp.com/send?phone=5585982246332&text={{ mensagem | urlencode }}"
@@ -143,6 +163,35 @@
             icon.classList.toggle('fa-times');
             icon.classList.toggle('fa-bars');
         });
+        document.querySelectorAll('.btn-favorito').forEach(button => {
+    button.addEventListener('click', function () {
+        const produtoId = this.dataset.produtoId;
+        const icon = this.querySelector('i');
+
+        fetch('/toggle_favorito', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ produto_id: produtoId })
+        })
+        .then(response => {
+            if (!response.ok) throw new Error('Erro na requisição');
+            return response.json();
+        })
+        .then(data => {
+            if (data.success) {
+                icon.classList.toggle('ativo', data.favoritado);
+            } else {
+                alert('É necessário estar logado para favoritar.');
+            }
+        })
+        .catch(error => {
+            console.error('Erro:', error);
+            alert('Erro ao processar favorito.');
+        });
+    });
+});
     </script>
 </body>
 </html>
