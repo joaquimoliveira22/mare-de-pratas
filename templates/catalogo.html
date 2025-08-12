@@ -1,91 +1,156 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Maré de Pratas - Catálogo</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Catalogo - Maré de Pratas</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/catalogo.css') }}">
-    <link rel="shortcut icon" type="imagex/png" href="/static/images/icone.ico">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='images/icone.ico') }}" type="image/x-icon">
 </head>
 <body>
     <header class="main-header">
-        <div class="container">
-            <div class="header-main">
-                <div class="logo-container">
-                    <a href="#" class="logo">
-                        <img src="{{ url_for('static', filename='images/logo1.jpg') }}" alt="">
-                        <span>Maré de Pratas</span>
-                    </a>
-                </div>
-
-                <div class="user-actions">
-                    <span class="user-name"><i class="fas fa-user"></i> {{ nome_usuario }}</span>
-                    <a href="{{ url_for('registro') }}" title="Logout"><i class="fas fa-sign-out-alt"></i></a>
-                    <a href="{{ url_for('login') }}" title="Login"><i class="fas fa-sign-in-alt"></i></a>
-                </div>
-
-                <div class="search-container">
-                    <form action="{{ url_for('listar_produtos') }}" method="GET">
-                        <input type="text" placeholder="Buscar produtos..." name="q">
-                        <button type="submit"><i class="fas fa-search"></i></button>
-                    </form>
-                </div>
-
-                <button class="menu-toggle" aria-label="Abrir menu">
-                    <i class="fas fa-bars"></i>
-                </button>
-            </div>
-
-
-            <nav class="mobile-nav">
-                <ul>
-                    <li><a href="#"><i class="fas fa-user"></i> {{ nome_usuario }}</a></li>
-                    <li><a href="{{ url_for('registro') }}"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
-                    <li><a href="{{ url_for('login') }}"><i class="fas fa-sign-in-alt"></i> Login</a></li>
-                </ul>
-            </nav>
-        </div>
-    </header>
-<main>
     <div class="container">
-        <h2 class="catalog-title">Catálogo de Produtos</h2>
-        
-        <div class="products-grid">
-            {% for produto in produtos %}
-            <div class="product-card">
-                <div class="product-image">
-                    <img src="{{ produto.foto_url }}" alt="{{ produto.nome }}">
-                </div>
-                <div class="product-info">
-                    <h3>{{ produto.nome }}</h3>
-                    <p class="description">{{ produto.descricao }}</p>
-                    <div class="price-container">
-                        <span class="price">R$ {{ '%.2f'|format(produto.valor) }}</span>
-                    </div>
-                    <form action="{{ url_for('finalizar_pedido') }}" method="POST">
-                        <input type="hidden" name="produto_id" value="{{ produto.id }}">
-                        <button type="submit" class="btn-comprar">Comprar</button>
-                    </form>
-                </div>
+        <div class="header-main">
+            <div class="logo-container">
+                <a href="{{ url_for('listar_produtos') }}" class="logo">
+                    <img src="{{ url_for('static', filename='images/logo1.jpg') }}" alt="Logo Maré de Pratas">
+                    <span>Maré de Pratas</span>
+                </a>
             </div>
-            {% endfor %}
-        </div>
-    </div>
-</main>
 
+            <!-- Barra de pesquisa centralizada -->
+            <div class="search-container">
+                <form action="{{ url_for('listar_produtos') }}" method="GET">
+                    <input type="text" placeholder="Buscar produtos..." name="q">
+                    <button type="submit">
+                        <i class="fa-solid fa-search"></i>
+                    </button>
+                </form>
+            </div>
+
+            <div class="user-actions">
+                <a href="{{ url_for('favoritos') }}" title="Favoritos">
+                    <i class="fa-solid fa-heart"></i>
+                </a>
+                <a href="{{ url_for('ver_carrinho') }}" title="Carrinho">
+                    <i class="fa-solid fa-cart-shopping"></i>
+                    {% if carrinho_qtd > 0 %}
+                        <span class="cart-badge">{{ carrinho_qtd }}</span>
+                    {% endif %}
+                </a>
+
+                {% if nome_usuario %}
+                    <span class="user-name"><i class="fa-solid fa-user"></i> {{ nome_usuario }}</span>
+                    <a href="{{ url_for('registro') }}" title="Logout"><i class="fa-solid fa-right-from-bracket"></i></a>
+                {% else %}
+                    <a href="{{ url_for('login') }}" title="Login"><i class="fa-solid fa-right-to-bracket"></i></a>
+                {% endif %}
+            </div>
+
+            <button class="menu-toggle" aria-label="Abrir menu">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+        </div>
+
+        <nav class="mobile-nav">
+            <ul>
+                {% if nome_usuario %}
+                    <li><a href="#"><i class="fa-solid fa-user"></i> {{ nome_usuario }}</a></li>
+                    <li><a href="{{ url_for('registro') }}"><i class="fa-solid fa-right-from-bracket"></i> Logout</a></li>
+                {% else %}
+                    <li><a href="{{ url_for('login') }}"><i class="fa-solid fa-right-to-bracket"></i> Login</a></li>
+                {% endif %}
+                <li><a href="{{ url_for('ver_carrinho') }}"><i class="fa-solid fa-cart-shopping"></i> Carrinho</a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+    <main>
+        <div class="container">
+            <h2 class="catalog-title">Catalogo</h2>
+
+            {% if produtos %}
+            <div class="products-grid">
+                {% for produto in produtos %}
+                <div class="product-card">
+                    <div class="product-image">
+                        <img src="{{ produto.foto_url }}" alt="Imagem de {{ produto.nome }}">
+                    </div>
+                    <div class="product-info">
+                        <p><strong>Tamanho:</strong> {{ produto.tamanho }}</p>
+                        <p><strong>Espessura:</strong> {{ produto.espessura }}</p>
+
+                        <button class="btn-favorito" data-produto-id="{{ produto.id }}" title="Favoritar">
+                            <i class="fa-solid fa-heart {% if produto.id in favoritos_ids %}ativo{% endif %}"></i>
+                        </button>
+
+
+
+                        <h3>{{ produto.nome }}</h3>
+                        <p class="description">{{ produto.descricao }}</p>
+                        <div class="price-container">
+                            {% if produto.desconto %}
+                                <span class="original-price" style="text-decoration: line-through; color: #999;">
+                                    R$ {{ '%.2f'|format(produto.valor) }}
+                                </span>
+                                <span class="discounted-price">
+                                    R$ {{ '%.2f'|format(produto.valor * (1 - produto.desconto / 100)) }}
+                                </span>
+                                <span class="discount-percent">(-{{ produto.desconto }}%)</span>
+                            {% else %}
+                                <span class="price">R$ {{ '%.2f'|format(produto.valor) }}</span>
+                            {% endif %}
+                        </div>
+
+                        <div class="product-buttons">
+                            {% if produto.estoque > 0 %}
+                            <form action="{{ url_for('adicionar_ao_carrinho') }}" method="POST">
+                                <input type="hidden" name="produto_id" value="{{ produto.id }}">
+                                <button type="submit" class="btn-carrinho">
+                                    <i class="fa-solid fa-cart-plus"></i> Carrinho
+                                </button>
+                            </form>
+                        {% else %}
+                            <button class="btn-carrinho disabled" disabled style="background-color: #ccc; cursor: not-allowed;">
+                                <i class="fa-solid fa-ban"></i> Sem estoque
+                            </button>
+                        {% endif %}
+
+
+                            {% set mensagem = "Olá! Gostaria de comprar o produto: " + produto.nome + " por R$ " + "%.2f"|format(produto.valor) %}
+                            <a href="https://api.whatsapp.com/send?phone=5585982246332&text={{ mensagem | urlencode }}"
+                               target="_blank"
+                               class="btn-comprar">
+                               <i class="fab fa-whatsapp"></i> Comprar
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <p style="text-align: center; padding: 2rem;">Você ainda não adicionou produtos aos favoritos.</p>
+            {% endif %}
+        </div>
+    </main>
 
     <footer class="main-footer">
         <div class="container">
             <div class="footer-container">
                 <div class="footer-info">
-                    <p><i class="fas fa-gem"></i> Joias em prata 950</p>
-                    <p><i class="fas fa-phone"></i> (85) 98224-6332</p>
-                    <p>Sobre: loja de joias de prata fundada em 2022. </p>
+                    <p><i class="fa-solid fa-gem"></i> Joias em prata 950</p>
+                    <p><i class="fa-solid fa-phone"></i> (85) 98224-6332</p>
+                    <p>Sobre: loja de joias de prata fundada em 2022.</p>
                 </div>
                 <div class="social-icons">
-                    <a href="https://www.instagram.com/mare_depratas?igsh=bDBsbXhwY3N5NmQ2"><i class="fab fa-instagram"></i></a>
-                    <a href="https://api.whatsapp.com/send/?phone=5585982246332"><i class="fab fa-whatsapp"></i></a>
+                    <a href="https://www.instagram.com/mare_depratas?igsh=bDBsbXhwY3N5NmQ2" target="_blank">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="https://api.whatsapp.com/send/?phone=5585982246332" target="_blank">
+                        <i class="fab fa-whatsapp"></i>
+                    </a>
                 </div>
             </div>
         </div>
@@ -94,18 +159,39 @@
     <script>
         document.querySelector('.menu-toggle').addEventListener('click', function () {
             document.querySelector('.mobile-nav').classList.toggle('active');
-            this.querySelector('i').classList.toggle('fa-times');
-            this.querySelector('i').classList.toggle('fa-bars');
+            const icon = this.querySelector('i');
+            icon.classList.toggle('fa-times');
+            icon.classList.toggle('fa-bars');
         });
+        document.querySelectorAll('.btn-favorito').forEach(button => {
+    button.addEventListener('click', function () {
+        const produtoId = this.dataset.produtoId;
+        const icon = this.querySelector('i');
 
-        document.querySelectorAll('.product-card').forEach(card => {
-            card.addEventListener('mouseenter', () => {
-                card.querySelector('.product-actions').style.opacity = '1';
-            });
-            card.addEventListener('mouseleave', () => {
-                card.querySelector('.product-actions').style.opacity = '0';
-            });
+        fetch('/toggle_favorito', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ produto_id: produtoId })
+        })
+        .then(response => {
+            if (!response.ok) throw new Error('Erro na requisição');
+            return response.json();
+        })
+        .then(data => {
+            if (data.success) {
+                icon.classList.toggle('ativo', data.favoritado);
+            } else {
+                alert('É necessário estar logado para favoritar.');
+            }
+        })
+        .catch(error => {
+            console.error('Erro:', error);
+            alert('Erro ao processar favorito.');
         });
+    });
+});
     </script>
 </body>
 </html>
