@@ -503,28 +503,8 @@ main {
     cursor: pointer;
     font-weight: bold;
     transition: background-color 0.3s ease;
- }   
-.btn-favorito {
-    background: none;
-    border: none;
-    cursor: pointer;
 }
 
-.btn-favorito i {
-    color: #aaa;
-    font-size: 1.3rem;
-    transition: color 0.3s;
-}
-
-.btn-favorito i.ativo {
-    color: red;
-}
-
-
-.form-favorito {
-    text-align: right;
-}
-    
 .btn-comprar:hover {
     background-color: #2f6fbe;
 }
@@ -533,93 +513,4 @@ main {
 .logo img {
     height: 50px;
     width: auto;
-}
-.user-actions a {
-  margin-left: 15px;
-  color: #ffffff;
-  font-size: 20px;
-  position: relative;
-}
-
-.cart-badge {
-  position: absolute;
-  top: -6px;
-  right: -10px;
-  background: red;
-  color: white;
-  font-size: 12px;
-  padding: 2px 6px;
-  border-radius: 50%;
-}
-
-.product-buttons {
-  margin-top: 10px;
-}
-
-.btn-comprar,
-.btn-carrinho {
-  padding: 8px 14px;
-  border: none;
-  border-radius: 6px;
-  font-weight: bold;
-  cursor: pointer;
-  margin-right: 6px;
-  transition: background 0.3s ease;
-}
-
-.btn-comprar {
-  background-color: #3a8af1;
-  color: white;
-}
-
-.btn-comprar:hover {
-  background-color: #296fd1;
-}
-
-.btn-carrinho {
-  background-color: #3a8af1;
-  color: #ffffff;
-  border: 2px solid #ffffff;
-}
-
-.btn-carrinho:hover {
-  background-color: #3a8af1;
-  color: #fff;
-}
-.btn-comprar {
-    display: inline-block;
-    background-color: #3a8af1;
-    color: white;
-    padding: 8px 16px;
-    border: none;
-    border-radius: 6px;
-    font-weight: bold;
-    text-decoration: none;
-    font-size: 14px;
-    transition: background-color 0.3s;
-}
-
-.btn-comprar:hover {
-    background-color: #3a8af1;
-}
-button.disabled {
-    background-color: #ccc;
-    color: #666;
-    cursor: not-allowed;
-    border: none;
-}
-.original-price {
-    text-decoration: line-through;
-    color: #999;
-    margin-right: 0.5rem;
-}
-
-.discounted-price {
-    color: red;
-    font-weight: bold;
-}
-
-.discount-percent {
-    font-size: 0.9rem;
-    color: green;
 }

@@ -4,8 +4,7 @@
    <meta charset="UTF-8">
    <title>Finalizar Pedido</title>
    <link rel="stylesheet" href="{{ url_for('static', filename='css/finalizar_pedido.css') }}">
-   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-   <link rel="shortcut icon" href="{{ url_for('static', filename='images/icone.ico') }}">
+   <link rel="shortcut icon" type="imagex/png" href="/static/images/icone.ico">
 </head>
 <body>
    <div class="top-bar">
@@ -13,53 +12,19 @@
        <a href="{{ url_for('catalogo') }}" class="btn-voltar">← Catálogo</a>
    </div>
 
-   <div class="container">
-       <h1>Finalizar Pedido</h1>
+   <h1>Finalizar Pedido</h1>
 
-       {% if carrinho %}
-       <table class="pedido-tabela">
-           <thead>
-               <tr>
-                   <th>Produto</th>
-                   <th>Valor</th>
-                   <th>Remover</th>
-               </tr>
-           </thead>
-           <tbody>
-               {% for item in carrinho %}
-               <tr>
-                   <td class="produto-info">
-                       <img src="{{ item.foto_url }}" alt="{{ item.nome }}">
-                       <span>{{ item.nome }}</span>
-                   </td>
-                   <td>R$ {{ '%.2f'|format(item.valor) }}</td>
-                   <td>
-                       <form action="{{ url_for('remover_do_carrinho', produto_id=item.id) }}" method="POST">
-                           <button type="submit" class="btn-remover"><i class="fas fa-trash-alt"></i></button>
-                       </form>
-                   </td>
-               </tr>
-               {% endfor %}
-           </tbody>
-       </table>
+   <div class="card-produto">
+       <img src="{{ produto.foto_url }}" alt="{{ produto.nome }}" width="200">
+       <h2>{{ produto.nome }}</h2>
+       <p>{{ produto.descricao }}</p>
+       <p><strong>R$ {{ '%.2f'|format(produto.valor) }}</strong></p>
 
-       <div class="resumo-final">
-           <h3>Total: R$ {{ '%.2f'|format(total) }}</h3>
-
-           {# Gera mensagem com todos os produtos #}
-           {% set mensagem = "Olá! Gostaria de finalizar meu pedido com os seguintes produtos:%0A" %}
-           {% for item in carrinho %}
-               {% set mensagem = mensagem + "- " + item.nome + " (R$ " + "%.2f"|format(item.valor) + ") x" + item.quantidade|string + "%0A" %}
-           {% endfor %}
-           {% set mensagem = mensagem + "Total: R$ " + "%.2f"|format(total) %}
-
-           <a href="https://api.whatsapp.com/send?phone=5585982246332&text={{ mensagem }}" class="btn-confirmar" target="_blank">
+       <div class="btn-container">
+           <a href="{{ url_for('confirmar_pedido', produto_id=produto.id) }}" class="btn-confirmar">
                Confirmar Pedido no WhatsApp
            </a>
        </div>
-       {% else %}
-       <p class="vazio">Seu carrinho está vazio.</p>
-       {% endif %}
    </div>
 </body>
 </html>
