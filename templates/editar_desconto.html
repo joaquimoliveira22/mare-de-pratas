@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Editar Desconto</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/administrador.css') }}">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='images/icone.ico') }}">
+</head>
+<body>
+    <div class="container-desconto">
+        <h2>Editar Desconto – {{ produto.nome }}</h2>
+        <form method="POST" class="form-desconto">
+            <label for="desconto">Desconto (%):</label>
+            <input type="number" name="desconto" min="0" max="100" value="{{ produto.desconto or 0 }}" required>
+
+            <div class="btn-group">
+                <button type="submit" class="btn">Salvar</button>
+                <a href="{{ url_for('painel_admin') }}" class="btn btn-cancelar">Cancelar</a>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

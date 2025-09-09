@@ -1,1 +1,7 @@
 instance/usuarios.db
+
+*.txt
+*.png
+*.jpg
+*.db
+*.ico
