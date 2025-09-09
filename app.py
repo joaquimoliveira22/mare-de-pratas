@@ -273,7 +273,7 @@ def finalizar_pedido():
             )
         else:
             mensagem_itens.append(
-                f"{quantidade}x {produto.nome} (R$ {produto.valor:.2f} cada) - Subtotal: R$ {subtotal:.2f}"
+                f"{quantidade}x {produto.nome} (R$ {preco_unitario:.2f} cada) - Subtotal: R$ {subtotal:.2f}"
             )
 
     mensagem_total = f"Total da compra: R$ {valor_total:.2f}"
@@ -350,11 +350,23 @@ def checar_sessao():
 @app.route('/confirmar_pedido/<int:produto_id>')
 def confirmar_pedido(produto_id):
     produto = Produto.query.get_or_404(produto_id)
-    mensagem = f"Olá! Gostaria de comprar o produto: {produto.nome} por R$ {produto.valor:.2f}"
+
+    # Aplica desconto, se houver
+    preco_unitario = produto.valor * (1 - (produto.desconto or 0) / 100)
+
+    if produto.desconto:
+        mensagem = (
+            f"Olá! Gostaria de comprar o produto: {produto.nome} "
+            f"(de R$ {produto.valor:.2f} por R$ {preco_unitario:.2f})"
+        )
+    else:
+        mensagem = f"Olá! Gostaria de comprar o produto: {produto.nome} por R$ {preco_unitario:.2f}"
+
     mensagem = mensagem.replace(' ', '%20')
     numero_whatsapp = '5585982246332'
     link = f"https://api.whatsapp.com/send?phone={numero_whatsapp}&text={mensagem}"
     return redirect(link)
+
 
 
 @app.route('/toggle_favorito', methods=['POST'])
