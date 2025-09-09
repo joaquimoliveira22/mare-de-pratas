@@ -247,10 +247,10 @@ def finalizar_pedido():
 
     for produto_id_str, quantidade in carrinho.items():
         produto = Produto.query.get(int(produto_id_str))
-    if produto:
-        if produto.estoque < quantidade:
-            flash(f'Estoque insuficiente para o produto: {produto.nome}', 'error')
-            return redirect(url_for('ver_carrinho'))
+        if produto:
+            if produto.estoque < quantidade:
+                flash(f'Estoque insuficiente para o produto: {produto.nome}', 'error')
+                return redirect(url_for('ver_carrinho'))
 
         produto.estoque -= quantidade  # Subtrai do estoque
         db.session.commit()  # Salva no banco
@@ -261,7 +261,7 @@ def finalizar_pedido():
         itens.append({
             'id': produto.id,
             'nome': produto.nome,
-            'valor': produto.valor,
+            'valor': preco_unitario,
             'quantidade': quantidade,
             'subtotal': subtotal,
             'foto_url': produto.foto_url
