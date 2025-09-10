@@ -231,6 +231,7 @@ def listar_produtos():
 
 from urllib.parse import quote_plus
 
+
 @app.route('/finalizar_pedido', methods=['GET', 'POST'])
 def finalizar_pedido():
     nome_usuario = session.get('nome_usuario')
@@ -268,14 +269,25 @@ def finalizar_pedido():
             'foto_url': produto.foto_url
         })
 
+        # 🔹 Monta a linha da mensagem
         if produto.desconto:
-            mensagem_itens.append(
-                f"{quantidade}x {produto.nome} (de R$ {produto.valor:.2f} por R$ {preco_unitario:.2f}) - Subtotal: R$ {subtotal:.2f}"
+            item_msg = (
+                f"{quantidade}x {produto.nome} "
+                f"(de R$ {produto.valor:.2f} por R$ {preco_unitario:.2f}) "
+                f"- Subtotal: R$ {subtotal:.2f}"
             )
         else:
-            mensagem_itens.append(
-                f"{quantidade}x {produto.nome} (R$ {preco_unitario:.2f} cada) - Subtotal: R$ {subtotal:.2f}"
+            item_msg = (
+                f"{quantidade}x {produto.nome} "
+                f"(R$ {preco_unitario:.2f} cada) "
+                f"- Subtotal: R$ {subtotal:.2f}"
             )
+
+        # 🔹 Se tiver foto, adiciona a URL na mensagem
+        if produto.foto_url:
+            item_msg += f"\nFoto: {produto.foto_url}"
+
+        mensagem_itens.append(item_msg)
 
         # 🔹 Só altera o estoque aqui (sem commit ainda)
         produto.estoque -= quantidade
@@ -284,12 +296,19 @@ def finalizar_pedido():
     db.session.commit()
 
     mensagem_total = f"Total da compra: R$ {valor_total:.2f}"
-    mensagem_completa = "Olá, gostaria de fazer o pedido:\n" + "\n".join(mensagem_itens) + "\n" + mensagem_total
 
-    mensagem_url = quote_plus(mensagem_completa)
+    # 🔹 Monta a mensagem completa com os produtos + total
+    mensagem_completa = (
+        "Olá, gostaria de fazer o pedido:\n"
+        + "\n\n".join(mensagem_itens)  # dois \n para separar melhor os produtos
+        + "\n\n"
+        + mensagem_total
+    )
+
+    # 🔹 Codifica corretamente (mantendo quebras de linha)
+    mensagem_url = quote(mensagem_completa)
+
     numero_whatsapp = '5585982246332'
-
-    # link base (funciona tanto mobile quanto PC)
     link_whatsapp = f"https://wa.me/{numero_whatsapp}?text={mensagem_url}"
 
     return render_template(
@@ -299,7 +318,6 @@ def finalizar_pedido():
         total=valor_total,
         link_whatsapp=link_whatsapp
     )
-
 
 @app.route('/editar_produto/<int:id>', methods=['GET', 'POST'])
 def editar_produto(id):
