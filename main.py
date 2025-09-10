@@ -374,34 +374,69 @@ def checar_sessao():
     print(f"Usuário na sessão: {session.get('nome_usuario')}")
 
 
-@app.route('/confirmar_pedido')
-def confirmar_pedido():
+@app.route('/confirmar_pedido', defaults={'produto_id': None})
+@app.route('/confirmar_pedido/<int:produto_id>')
+def confirmar_pedido(produto_id):
+    numero_whatsapp = '5585982246332'
+    mensagem_itens = []
+    valor_total = 0
+
+    # 🔹 Caso 1: confirmar apenas UM produto
+    if produto_id:
+        produto = Produto.query.get_or_404(produto_id)
+        preco_unitario = produto.valor * (1 - (produto.desconto or 0) / 100)
+
+        if produto.desconto:
+            mensagem = (
+                f"Olá! Gostaria de comprar o produto: {produto.nome} "
+                f"(de R$ {produto.valor:.2f} por R$ {preco_unitario:.2f})"
+            )
+        else:
+            mensagem = f"Olá! Gostaria de comprar o produto: {produto.nome} por R$ {preco_unitario:.2f}"
+
+        mensagem_url = quote(mensagem)
+        link = f"https://wa.me/{numero_whatsapp}?text={mensagem_url}"
+        return redirect(link)
+
+    # 🔹 Caso 2: confirmar TODOS os itens do carrinho
     carrinho = session.get('carrinho', {})
     if not carrinho:
         flash("Seu carrinho está vazio.", "error")
         return redirect(url_for('catalogo'))
 
-    mensagem_itens = []
-    valor_total = 0
-
     for produto_id_str, quantidade in carrinho.items():
         produto = Produto.query.get(int(produto_id_str))
+        if not produto:
+            continue
+
         preco_unitario = produto.valor * (1 - (produto.desconto or 0) / 100)
         subtotal = preco_unitario * quantidade
         valor_total += subtotal
 
         if produto.desconto:
-            item_msg = f"{quantidade}x {produto.nome} (de R$ {produto.valor:.2f} por R$ {preco_unitario:.2f}) - Subtotal: R$ {subtotal:.2f}"
+            item_msg = (
+                f"{quantidade}x {produto.nome} "
+                f"(de R$ {produto.valor:.2f} por R$ {preco_unitario:.2f}) "
+                f"- Subtotal: R$ {subtotal:.2f}"
+            )
         else:
-            item_msg = f"{quantidade}x {produto.nome} (R$ {preco_unitario:.2f} cada) - Subtotal: R$ {subtotal:.2f}"
+            item_msg = (
+                f"{quantidade}x {produto.nome} "
+                f"(R$ {preco_unitario:.2f} cada) "
+                f"- Subtotal: R$ {subtotal:.2f}"
+            )
 
         mensagem_itens.append(item_msg)
 
     mensagem_total = f"Total da compra: R$ {valor_total:.2f}"
-    mensagem_completa = "Olá! Gostaria de fazer o pedido:\n" + "\n".join(mensagem_itens) + "\n" + mensagem_total
+    mensagem_completa = (
+        "Olá! Gostaria de fazer o pedido:\n"
+        + "\n".join(mensagem_itens)
+        + "\n"
+        + mensagem_total
+    )
 
     mensagem_url = quote(mensagem_completa)
-    numero_whatsapp = '5585982246332'
     link = f"https://wa.me/{numero_whatsapp}?text={mensagem_url}"
     return redirect(link)
 
