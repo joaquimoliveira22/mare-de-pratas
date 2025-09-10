@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for, session, f
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
-from urllib.parse import quote_plus
+from urllib.parse import quote, quote_plus
 import os
 
 app = Flask(__name__)
@@ -229,6 +229,8 @@ def listar_produtos():
     )
 
 
+from urllib.parse import quote_plus
+
 @app.route('/finalizar_pedido', methods=['GET', 'POST'])
 def finalizar_pedido():
     nome_usuario = session.get('nome_usuario')
@@ -252,12 +254,11 @@ def finalizar_pedido():
                 flash(f'Estoque insuficiente para o produto: {produto.nome}', 'error')
                 return redirect(url_for('ver_carrinho'))
 
-        produto.estoque -= quantidade  # Subtrai do estoque
-        db.session.commit()  # Salva no banco
-
+        # 🔹 Calcula o desconto ANTES do commit
         preco_unitario = produto.valor * (1 - (produto.desconto or 0) / 100)
         subtotal = preco_unitario * quantidade
         valor_total += subtotal
+
         itens.append({
             'id': produto.id,
             'nome': produto.nome,
@@ -276,23 +277,29 @@ def finalizar_pedido():
                 f"{quantidade}x {produto.nome} (R$ {preco_unitario:.2f} cada) - Subtotal: R$ {subtotal:.2f}"
             )
 
+        # 🔹 Só altera o estoque aqui (sem commit ainda)
+        produto.estoque -= quantidade
+
+    # 🔹 Commit apenas uma vez no final
+    db.session.commit()
+
     mensagem_total = f"Total da compra: R$ {valor_total:.2f}"
     mensagem_completa = "Olá, gostaria de fazer o pedido:\n" + "\n".join(mensagem_itens) + "\n" + mensagem_total
 
     mensagem_url = quote_plus(mensagem_completa)
     numero_whatsapp = '5585982246332'
-    link_whatsapp = f"https://api.whatsapp.com/send?phone={numero_whatsapp}&text={mensagem_url}"
 
-    session.pop('carrinho', None)
-    
+    # link base (funciona tanto mobile quanto PC)
+    link_whatsapp = f"https://wa.me/{numero_whatsapp}?text={mensagem_url}"
 
-    return render_template( 
+    return render_template(
         'finalizar_pedido.html',
         nome_usuario=nome_usuario,
         carrinho=itens,
         total=valor_total,
         link_whatsapp=link_whatsapp
     )
+
 
 @app.route('/editar_produto/<int:id>', methods=['GET', 'POST'])
 def editar_produto(id):
@@ -314,6 +321,7 @@ def editar_produto(id):
         flash('Produto atualizado com sucesso!', 'success')
         return redirect(url_for('painel_admin'))
     return render_template('editar_produto.html', produto=produto)
+
 
 @app.route('/remover_produto/<int:id>', methods=['GET', 'POST'])
 def remover_produto(id):
@@ -342,6 +350,7 @@ def inject_carrinho_qtd():
     carrinho_qtd = sum(carrinho.values())
     return {'carrinho_qtd': carrinho_qtd}
 
+
 @app.before_request
 def checar_sessao():
     print(f"Usuário na sessão: {session.get('nome_usuario')}")
@@ -362,10 +371,13 @@ def confirmar_pedido(produto_id):
     else:
         mensagem = f"Olá! Gostaria de comprar o produto: {produto.nome} por R$ {preco_unitario:.2f}"
 
-    mensagem = mensagem.replace(' ', '%20')
+    # Codifica a mensagem corretamente para URL
+    mensagem = quote(mensagem)
+
     numero_whatsapp = '5585982246332'
     link = f"https://api.whatsapp.com/send?phone={numero_whatsapp}&text={mensagem}"
     return redirect(link)
+
 
 
 
