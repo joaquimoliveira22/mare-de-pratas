@@ -441,8 +441,6 @@ def confirmar_pedido(produto_id):
     return redirect(link)
 
 
-
-
 @app.route('/toggle_favorito', methods=['POST'])
 def toggle_favorito():
     if 'nome_usuario' not in session:
