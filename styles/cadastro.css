@@ -1,0 +1,114 @@
+/* Reset e Estilos Globais */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: #f7f7f7; /* Um cinza bem claro para o fundo */
+    color: #fff;
+}
+
+/* Header */
+.header {
+    background-color: #2a61f1;
+    padding: 20px 40px;
+    width: 100%;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+}
+
+.logo {
+    height: 40px; /* Ajuste a altura conforme necessário */
+    margin-right: 15px;
+    filter: brightness(0) invert(1); /* Deixa a imagem do logo branca */
+}
+
+.brand-name {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #fff;
+}
+
+/* Conteúdo Principal */
+.main-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: calc(100vh - 80px); /* Subtrai a altura do header */
+    padding: 20px;
+}
+
+/* Container do Login */
+.login-container {
+    background-color: #2a61f1;
+    padding: 40px;
+    border-radius: 25px;
+    text-align: center;
+    width: 100%;
+    max-width: 450px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.login-container h1 {
+    font-size: 1.1rem;
+    margin-bottom: 25px;
+    font-weight: 700;
+}
+
+/* Formulário */
+.login-container form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.login-container input {
+    border: none;
+    border-radius: 10px;
+    padding: 15px;
+    font-size: 1rem;
+    background-color: #fff;
+    color: #333;
+}
+
+.login-container input::placeholder {
+    color: #999;
+}
+
+.login-container button {
+    background-color: transparent;
+    color: #fff;
+    border: 2px solid #fff;
+    border-radius: 25px;
+    padding: 12px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+    margin-top: 10px;
+}
+
+.login-container button:hover {
+    background-color: #fff;
+    color: #2a61f1;
+}
+
+/* Link para Criar Conta */
+.create-account-link {
+    display: inline-block;
+    margin-top: 20px;
+    color: #fff;
+    text-decoration: none;
+    font-size: 0.9rem;
+}
+
+.create-account-link:hover {
+    text-decoration: underline;
+}
