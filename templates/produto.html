@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ produto.nome }} - Maré de Pratas</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles/produto.css') }}">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <header class="header">
+    <div class="logo-container">
+      <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo Maré de Pratas" class="logo">
+      <span class="brand-name">MARÉ DE PRATAS</span>
+    </div>
+  </header>
+
+  <main class="produto-container">
+    <div class="produto-box">
+      <img src="{{ url_for('static', filename='images/produtos/' + produto.imagem) }}" alt="{{ produto.nome }}" class="produto-imagem">
+
+      <div class="produto-info">
+        <h1 class="produto-nome">{{ produto.nome }}</h1>
+        <p class="produto-descricao">{{ produto.descricao }}</p>
+        <span class="produto-preco">R$ {{ "%.2f"|format(produto.preco) }}</span>
+        <button class="botao-carrinho">Adicionar ao carrinho</button>
+      </div>
+    </div>
+  </main>
+</body>
+</html>
