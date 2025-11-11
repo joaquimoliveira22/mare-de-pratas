@@ -1,89 +1,149 @@
+/* Estilos básicos */
 body {
     font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
-    color: white;
+    background-color: #f4f7f6;
+    margin: 0;
     padding: 20px;
 }
 
-h1 {
-    color: #3a8af1;
-    text-align: center;
-}
-
-.btn {
-    padding: 10px 15px;
-    border: none;
-    border-radius: 6px;
-    background-color: #3a8af1;
-    color: white;
-    cursor: pointer;
-    margin-bottom: 15px;
-    font-weight: bold;
-}
-
-.btn:hover {
-    background-color: #3275d0;
-}
-
-.logout {
-    background-color: #f44336;
-}
-
-.logout:hover {
-    background-color: #c0392b;
-}
-
-.btn-remover {
-    background-color: #e74c3c;
-}
-
-.btn-remover:hover {
-    background-color: #c0392b;
-}
-
-.btn-estoque {
-    background-color: #27ae60;
-}
-
-.btn-estoque:hover {
-    background-color: #1e874b;
-}
-
+/* Controles do Topo (título e sair) */
 .top-controls {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    margin-bottom: 20px;
+    padding: 10px 20px;
+    background-color: #0056b3; /* Header azul da imagem */
+    color: white;
+    border-radius: 8px;
+}
+
+.top-controls h1 {
+    margin: 0;
+    font-size: 1.5rem;
+}
+
+/* Estilo geral dos botões */
+.btn {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    text-decoration: none;
+    color: white;
+    font-size: 0.9rem;
+}
+
+.btn-cadastrar {
+    background-color: #007bff; /* Azul principal */
+    display: block;
+    width: fit-content;
+    margin-bottom: 25px;
+}
+.btn-cadastrar:hover {
+    background-color: #0056b3;
+}
+
+.logout {
+    background-color: #dc3545; /* Vermelho */
+}
+.logout:hover {
+    background-color: #c82333;
+}
+
+
+/* --- A NOVA GRADE DE PRODUTOS --- */
+
+.product-grid {
+    display: grid;
+    /* Cria colunas responsivas: 
+       - Tenta encaixar o máximo de colunas de 280px
+       - Se não couber, quebra a linha
+    */
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px; /* Espaço entre os cards */
+}
+
+.product-card {
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Alinha o conteúdo */
+}
+
+.product-card img {
+    width: 100%;
+    height: 220px; /* Altura fixa para todas as imagens */
+    object-fit: cover; /* Garante que a imagem cubra a área sem distorcer */
+    border-radius: 8px; /* Cantos arredondados da imagem */
     margin-bottom: 15px;
 }
 
-.table-container {
-    margin-top: 20px;
+.product-card h3 {
+    font-size: 1.25rem;
+    margin: 10px 0;
+    color: #333;
 }
 
-table {
-    width: 100%;
-    border-collapse: collapse;
-    background-color: #3a8af1;
-    color: white;
-    border-radius: 8px;
-    overflow: hidden;
+/* Estilos de Preço */
+.price-container {
+    margin: 10px 0;
 }
 
-th, td {
-    padding: 12px;
-    text-align: left;
-    border-bottom: 1px solid white;
+.original-price {
+    text-decoration: line-through; /* Preço riscado */
+    color: #999;
+    font-size: 0.9rem;
+    margin-right: 10px;
 }
 
-th {
-    background-color: #3275d0;
+.final-price {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #007bff; /* Cor azul do preço */
 }
 
-img {
-    max-width: 100px;
-    border-radius: 6px;
+.stock {
+    font-size: 0.9rem;
+    color: #555;
+    margin: 5px 0;
 }
 
-.actions button {
-    margin-right: 5px;
+.details {
+    font-size: 0.8rem;
+    color: #777;
+    margin: 5px 0 15px 0;
+}
+
+/* Botões de Ação dentro do Card */
+.actions {
+    display: grid; /* Usamos grid para os botões */
+    grid-template-columns: 1fr 1fr; /* Duas colunas */
+    gap: 8px; /* Espaço entre os botões */
+    margin-top: 15px;
+}
+
+.actions .btn {
+    width: 100%; /* Faz os botões ocuparem todo o espaço da coluna */
+    padding: 8px;
+    font-size: 0.85rem;
+}
+
+/* Cores específicas dos botões de ação */
+.btn-desconto { background-color: #17a2b8; } /* Ciano */
+.btn-editar { background-color: #ffc107; color: #212529; } /* Amarelo */
+.btn-estoque { background-color: #28a745; } /* Verde */
+.btn-remover { background-color: #dc3545; } /* Vermelho */
+
+.no-products {
+    text-align: center;
+    font-size: 1.2rem;
+    color: #777;
+    grid-column: 1 / -1; /* Ocupa toda a largura da grade */
 }

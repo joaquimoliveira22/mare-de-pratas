@@ -16,61 +16,52 @@
     </div>
 
     <a href="{{ url_for('cadastrar_produto') }}">
-        <button class="btn">+ Cadastrar Novo Produto</button>
+        <button class="btn btn-cadastrar">+ Cadastrar Novo Produto</button>
     </a>
 
-    <div class="table-container">
-        <table>
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Nome</th>
-                    <th>Descrição</th>
-                    <th>Foto</th>
-                    <th>Valor (R$)</th>
-                    <th>Desconto (%)</th>
-                    <th>Estoque</th>
-                    <th>Tamanho</th>
-                    <th>Espessura</th>
-                    <th>Ações</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for produto in produtos %}
-                <tr>
-                    <td>{{ produto.id }}</td>
-                    <td>{{ produto.nome }}</td>
-                    <td>{{ produto.descricao }}</td>
-                    <td><img src="{{ produto.foto_url }}" alt="Imagem do Produto" style="width: 60px; height: auto;"></td>
-                    <td>{{ '%.2f'|format(produto.valor) }}</td>
-                    <td>{{ produto.desconto or '0' }}</td>
-                    <td>{{ produto.estoque }}</td>
-                    <td>{{ produto.tamanho or '-' }}</td>
-                    <td>{{ produto.espessura or '-' }}</td>
-                    <td class="actions">
-                        <a href="{{ url_for('editar_desconto', id=produto.id) }}">
-                        <button class="btn btn-desconto">Desconto</button>
-                    </a>
-
-                        <a href="{{ url_for('editar_produto', id=produto.id) }}">
-                            <button class="btn">Editar</button>
-                        </a>
-                        <a href="{{ url_for('remover_produto', id=produto.id) }}">
-                            <button class="btn btn-remover">Remover</button>
-                        </a>
-                        <a href="{{ url_for('ajustar_estoque', id=produto.id) }}">
-                            <button class="btn btn-estoque">Estoque</button>
-                        </a>
-                    </td>
-                </tr>
+    <div class="product-grid">
+        
+        {% for produto in produtos %}
+        <div class="product-card">
+            
+            <img src="{{ produto.foto_url }}" alt="Imagem do {{ produto.nome }}">
+            
+            <h3>{{ produto.nome }}</h3>
+            
+            <div class="price-container">
+                {% if produto.desconto and produto.desconto > 0 %}
+                    <span class="original-price">R$ {{ '%.2f'|format(produto.valor) }}</span>
+                    <span class="final-price">R$ {{ '%.2f'|format(produto.valor * (1 - (produto.desconto or 0) / 100)) }}</span>
                 {% else %}
-                <tr>
-                    <td colspan="10" style="text-align:center;">Nenhum produto cadastrado.</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+                    <span class="final-price">R$ {{ '%.2f'|format(produto.valor) }}</span>
+                {% endif %}
+            </div>
+            
+            <p class="stock">Em estoque: {{ produto.estoque }} unidades</p>
+            
+            <p class="details">
+                Tamanho: {{ produto.tamanho or '-' }} | Espessura: {{ produto.espessura or '-' }}
+            </p>
+
+            <div class="actions">
+                <a href="{{ url_for('editar_desconto', id=produto.id) }}">
+                    <button class="btn btn-desconto">Desconto</button>
+                </a>
+                <a href="{{ url_for('editar_produto', id=produto.id) }}">
+                    <button class="btn btn-editar">Editar</button>
+                </a>
+                <a href="{{ url_for('ajustar_estoque', id=produto.id) }}">
+                    <button class="btn btn-estoque">Estoque</button>
+                </a>
+                <a href="{{ url_for('remover_produto', id=produto.id) }}">
+                    <button class="btn btn-remover">Remover</button>
+                </a>
+            </div>
+
+        </div>
+        {% else %}
+        <p class="no-products">Nenhum produto cadastrado.</p>
+        {% endfor %}
     </div>
 
 </body>
-</html>
